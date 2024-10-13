@@ -445,11 +445,49 @@ public class MyTestFile extends RaLibTestSuite {
         PSymbolInstance psi_get = new PSymbolInstance(I_GET, new DataValue(T_KEY, 0));
         clctn.add(psi_put);
         clctn.add(psi_get);
-        // DefaultQuery<PSymbolInstance, Boolean> res = mO.findCounterExample(sul, clctn);
+
+        // Collection<Transition> startTrs = sul.getInitialState().getOut();
+        // Iterator it = startTrs.iterator();
+        // Integer len = startTrs.size();
+        // for (Transition t: startTrs) {
+        //     ParameterizedSymbol pi = t.getLabel();
+        //     System.out.println("PI IS " + pi.toString());
+        //     PSymbolInstance psi = mO.PsToPsi(pi);
+        //     ParameterizedSymbol po = psi.getBaseSymbol();
+        //     System.out.println("PO IS " + po.toString());
+        //     Assert.assertEquals(po.toString(), pi.toString(), "Oracle PsToPsi inaccurate");
+
+        //     mO.PsToPsi(pi);
+        //     mO.PsToPsi(pi);
+        //     mO.PsToPsi(pi);
+        //     mO.PsToPsi(pi);
+        //     mO.PsToPsi(pi);
+        //     mO.PsToPsi(pi);
+        //     mO.PsToPsi(pi);
+        //     mO.PsToPsi(pi);
+        // }
+
+        //CRASHES WHEN FINDING MEALY COUNTER EXAMPLE, EXCEPT ONCE IN A WHILE
+        DefaultQuery<PSymbolInstance, Boolean> res = mO.findCounterExample(sul, clctn);
         // Word<PSymbolInstance> ce = res.getInput();
-        // System.out.println("COUNTEREXAMPLE IS: ");
+        // System.out.println("COUNTEREXAMPLE IS: " + res);
+        // System.out.println("COUNTEREXAMPLE INPUT IS: " + ce);
+
         // for (PSymbolInstance psi : ce) {
-        //     System.out.println(ce);
+        //     System.out.println(psi);
+        // }
+
+        // Word<ParameterizedSymbol> c = Word.epsilon();
+        // c = c.append(I_PUT);
+        // c = c.append(I_GET);
+
+        // System.out.println("C IS: " + c.toString());
+        // DefaultQuery<ParameterizedSymbol, Boolean> q = new DefaultQuery<>(c, true);
+        // DefaultQuery<PSymbolInstance, Boolean> r = mO.translateCounterExample(q);
+        // Word<PSymbolInstance> ce = r.getInput();
+        // System.out.println("COUNTEREXAMPLE IS: " + r.toString());
+        // for (PSymbolInstance psi : ce) {
+        //     System.out.println(psi);
         // }
     }
 
