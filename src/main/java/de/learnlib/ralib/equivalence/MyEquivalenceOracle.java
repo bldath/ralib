@@ -82,22 +82,27 @@ public class MyEquivalenceOracle implements IOEquivalenceOracle {
     return new  ArrayList<>(set);
     }
 
-    public DefaultQuery<PSymbolInstance, Boolean> translateCounterExample(DefaultQuery<ParameterizedSymbol, Boolean> q) {
-        Boolean b = false;
-        // if (q.getOutput().equals(true)) {
-        //     b = true;
-        // }
-        System.out.println("HERE");
+    public DefaultQuery<PSymbolInstance, Object> translateCounterExample(DefaultQuery<ParameterizedSymbol, Object> q) {
         Word<PSymbolInstance> ce = Word.epsilon();
-        Word<ParameterizedSymbol> qw = q.getInput();
-        //System.out.println(q.getOutput().getClass()); //FIX THIS: WRONG TYPE.
         for (ParameterizedSymbol ps: q.getInput()) {
             System.out.println("PS " + ps);
             PSymbolInstance psi = PsToPsi(ps);
             System.out.println("PSI " + psi);
             ce = ce.append(psi);
         }
-        DefaultQuery<PSymbolInstance, Boolean> qRA = new DefaultQuery<>(ce, b);
+        if (q.getOutput() instanceof Word) {
+            Word<ParameterizedSymbol> qo = (Word<ParameterizedSymbol>) q.getOutput();
+            Word<PSymbolInstance> ceo = Word.epsilon();
+            for (ParameterizedSymbol ps: qo) {
+                System.out.println("PS " + ps);
+                PSymbolInstance psi = PsToPsi(ps);
+                System.out.println("PSI " + psi);
+                ceo = ceo.append(psi);
+            }
+            DefaultQuery<PSymbolInstance, Object> qRAo = new DefaultQuery<>(ce, ceo);
+            return qRAo;
+        }
+        DefaultQuery<PSymbolInstance, Object> qRA = new DefaultQuery<>(ce, q.getOutput());
         return qRA;
     }
 
@@ -112,12 +117,18 @@ public class MyEquivalenceOracle implements IOEquivalenceOracle {
                 System.out.println("Made RWPEQOracle");
                 Collection<ParameterizedSymbol> inputAlph = alphabetTranslator((Collection<PSymbolInstance>) clctn);
                 System.out.println("Made inputalphabet: " + inputAlph.toString());
-                //TODO FIX BUGS WHEN FINDING MEALY COUNTEREXAMPLE
-                DefaultQuery<ParameterizedSymbol, Boolean> qM = rwpO.findCounterExample(MM, inputAlph);
+                DefaultQuery<ParameterizedSymbol, Object> qM = rwpO.findCounterExample(MM, inputAlph);
+                if (qM.getOutput() instanceof Word) {
+                    Word<ParameterizedSymbol> tmpW = (Word<ParameterizedSymbol>) qM.getOutput();
+                    System.out.println("Mealy counterexample input: " + qM.getInput() + " and output word: " + tmpW);
+                } else {
+                    Boolean tmpB = (Boolean) qM.getOutput();
+                    System.out.println("Mealy counterexample input: " + qM.getInput() + " and output boolean: " + tmpB);
+                }
                 System.out.println("Generated mealy counterexample: " + qM.toString());
-                DefaultQuery<PSymbolInstance, Boolean> qRA = translateCounterExample(qM);//CHECK THIS
+                DefaultQuery<PSymbolInstance, Object> qRA = translateCounterExample(qM);
                 System.out.println("Translated counterexample: " + qRA.toString());
-                return qRA;
+                return new DefaultQuery<PSymbolInstance, Boolean>(qRA.getInput(), true);//TODO
             }
 
     private Collection<ParameterizedSymbol> alphabetTranslator (Collection<PSymbolInstance> psiAlph) {

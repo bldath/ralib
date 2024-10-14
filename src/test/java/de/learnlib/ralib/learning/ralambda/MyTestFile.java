@@ -367,7 +367,39 @@ public class MyTestFile extends RaLibTestSuite {
 
         MyRAtoMealyTransformer RAtoM = new MyRAtoMealyTransformer(sul, alphabet);
         FastMealy<ParameterizedSymbol, ParameterizedSymbol> actMealy = RAtoM.getMealy();
-        //System.out.println("RA IS: " + sul.toString());
+        System.out.println("RA IS: " + sul.toString());
+
+//         RA IS: l0 (+) (initial):
+//   (l0 (+), ?put[T_val], TRUE, [r3:=p1,], l3 (+))
+
+// l1 (+):
+//   (l1 (+), ?put[T_val], TRUE, [r1:=r1,r3:=r3,r4:=p1,], l4 (+))
+//   (l1 (+), ?get[T_key], (r1==p1), [r1:=r1,r3:=r3,], l5 (+))
+//   (l1 (+), ?get[T_key], (!(r1==p1)), [r1:=r1,r3:=r3,], l6 (+))
+
+// l2 (+):
+//   (l2 (+), ?get[T_key], (r1==p1), [r1:=r1,r3:=r3,r2:=r2,r4:=r4,], l7 (+))
+//   (l2 (+), ?get[T_key], (r2==p1), [r1:=r1,r3:=r3,r2:=r2,r4:=r4,], l8 (+))
+
+// l3 (+):
+//   (l3 (+), !o_p[T_key], TRUE, F:[p1], M:[], [r3:=r3,r1:=p1,], l1 (+))
+
+// l4 (+):
+//   (l4 (+), !o_p[T_key], TRUE, F:[p1], M:[], [r1:=r1,r3:=r3,r4:=r4,r2:=p1,], l2 (+))
+
+// l5 (+):
+//   (l5 (+), !o_g[T_val], TRUE, F:[], M:[p1>r3,], [r1:=r1,r3:=r3,], l1 (+))
+
+// l6 (+):
+//   (l6 (+), !null[], TRUE, F:[], M:[], [r1:=r1,r3:=r3,], l1 (+))
+
+// l7 (+):
+//   (l7 (+), !o_g[T_val], TRUE, F:[], M:[p1>r3,], [r1:=r1,r3:=r3,r2:=r2,r4:=r4,], l2 (+))
+
+// l8 (+):
+//   (l8 (+), !o_g[T_val], TRUE, F:[], M:[p1>r4,], [r1:=r1,r3:=r3,r2:=r2,r4:=r4,], l2 (+))
+
+// Init:[]
 
         FastMealy<ParameterizedSymbol, ParameterizedSymbol> expMealy = new FastMealy<>(alphabet);
         FastMealyState<ParameterizedSymbol> exp0 = expMealy.addInitialState();
@@ -467,7 +499,7 @@ public class MyTestFile extends RaLibTestSuite {
         //     mO.PsToPsi(pi);
         // }
 
-        //CRASHES WHEN FINDING MEALY COUNTER EXAMPLE, EXCEPT ONCE IN A WHILE
+        //CRASHES WHEN FINDING MEALY COUNTER EXAMPLE, EXCEPT ONCE IN A WHILE, BUT RA EXAMPLE IS INCOMPLETE
         DefaultQuery<PSymbolInstance, Boolean> res = mO.findCounterExample(sul, clctn);
         // Word<PSymbolInstance> ce = res.getInput();
         // System.out.println("COUNTEREXAMPLE IS: " + res);
