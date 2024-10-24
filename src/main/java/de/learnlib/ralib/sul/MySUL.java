@@ -46,7 +46,6 @@ public class MySUL implements SUL<ParameterizedSymbol, ParameterizedSymbol> {
         int i = 0;
         for (DataType t : ps.getPtypes()) {
             Parameter p = pgen.next(t);
-            //System.out.println("Datatype: " + p.getType().toString() + " ID: " + p.getId());
             List<DataValue> old = computeOld(t, pval);
             DataValue dv = teach.get(t).getFreshValue(old);
             vals[i] = dv;
@@ -55,7 +54,6 @@ public class MySUL implements SUL<ParameterizedSymbol, ParameterizedSymbol> {
         }
         PSymbolInstance psi = new PSymbolInstance(ps, vals);
         pref = pref.append(psi);
-        //System.out.println("Prefix: " + pref.toString());
         return psi;
     }
 
@@ -63,7 +61,6 @@ public class MySUL implements SUL<ParameterizedSymbol, ParameterizedSymbol> {
         PSymbolInstance psi = psToPsi(pi);
         PSymbolInstance pso = dwSUL.step(psi);
         ParameterizedSymbol po = pso.getBaseSymbol();
-        //ParameterizedSymbol po = psi.getBaseSymbol();
         return po;
     }
 

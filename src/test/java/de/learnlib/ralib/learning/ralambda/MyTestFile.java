@@ -55,7 +55,6 @@ import de.learnlib.ralib.sul.MySUL;
 import de.learnlib.ralib.sul.SimulatorSUL;
 import de.learnlib.ralib.theory.Theory;
 import de.learnlib.ralib.tools.theories.IntegerEqualityTheory;
-import de.learnlib.ralib.words.InputSymbol;
 import de.learnlib.ralib.words.OutputSymbol;
 import de.learnlib.ralib.words.PSymbolInstance;
 import de.learnlib.ralib.words.ParameterizedSymbol;
@@ -87,10 +86,8 @@ public class MyTestFile extends RaLibTestSuite {
         ralambda.setSolver(solver);
         ralambda.learn();
         MutableRegisterAutomaton hyp = ralambda.getHypothesis();
-        MyRAtoMealyTransformer RAtoM = new MyRAtoMealyTransformer(hyp, alphabet);
-        FastMealy<ParameterizedSymbol, ParameterizedSymbol> actMealy = RAtoM.getMealy();
-        //System.out.println("RA IS: " + hyp.toString());
-
+        MyRAtoMealyTransformer raToM = new MyRAtoMealyTransformer(hyp, alphabet);
+        FastMealy<ParameterizedSymbol, ParameterizedSymbol> actMealy = raToM.getMealy();
         FastMealy<ParameterizedSymbol, ParameterizedSymbol> expMealy = new FastMealy<>(alphabet);
         FastMealyState<ParameterizedSymbol> exp0 = expMealy.addInitialState();
         FastMealyState<ParameterizedSymbol> exp1 = expMealy.addState();
@@ -110,35 +107,10 @@ public class MyTestFile extends RaLibTestSuite {
             Iterator etIt = expTrs.iterator();
             for (MealyTransition at: actTrs){
                 MealyTransition et = (MealyTransition) etIt.next();
-                System.out.println(at.getOutput().toString());
                 Assert.assertEquals(at.getSuccessor().toString(), et.getSuccessor().toString());
                 Assert.assertEquals(at.getOutput().toString(), et.getOutput().toString());
             }
         }
-        // ParameterizedSymbol p1 = new ParameterizedSymbol("+") {};
-        // ParameterizedSymbol p2 = new ParameterizedSymbol("-") {};
-        // InputSymbol p3 = new InputSymbol("+") {};
-        // InputSymbol p4 = new InputSymbol("-") {};
-        // OutputSymbol p5 = new OutputSymbol("+") {};
-        // OutputSymbol p6 = new OutputSymbol("-") {};
-        // System.out.println(p1.toString());
-        // System.out.println(p2.toString());
-        // System.out.println(p3.toString());
-        // System.out.println(p4.toString());
-        // System.out.println(p5.toString());
-        // System.out.println(p6.toString());
-        // SimulatorSUL dwSUL = new SimulatorSUL(hyp, teachers, consts);
-        // MySUL msu = new MySUL(teachers, dwSUL);
-        // Collection<Transition> startTrs = hyp.getInitialState().getOut();
-        // msu.pre();
-        // for (Transition t: startTrs) {
-        //     ParameterizedSymbol pi = t.getLabel();
-        //     ParameterizedSymbol po = msu.step(pi);
-        //     Assert.assertEquals(po.toString(), pi.toString(), "SUL step input output do not match");
-        // }
-        // msu.post();
-        // de.learnlib.oracle.MembershipOracle dwO = new SimulatorOracle(sul);
-        // de.learnlib.oracle.equivalence.RandomWpMethodEQOracle o = new RandomWpMethodEQOracle(dwO, 1, 10);
     }
 
     @Test
@@ -192,10 +164,8 @@ public class MyTestFile extends RaLibTestSuite {
         expMealy.addTransition(exp3, I_PUSH, exp2, new OutputSymbol("-") {});
         expMealy.addTransition(exp0, I_POP, exp2, new OutputSymbol("-") {});
 
-        MyRAtoMealyTransformer RAtoM = new MyRAtoMealyTransformer(hyp, alphabet);
-        FastMealy<ParameterizedSymbol, ParameterizedSymbol> actMealy = RAtoM.getMealy();
-        //System.out.println("RA IS: " + hyp.toString());
-
+        MyRAtoMealyTransformer raToM = new MyRAtoMealyTransformer(hyp, alphabet);
+        FastMealy<ParameterizedSymbol, ParameterizedSymbol> actMealy = raToM.getMealy();
         Collection<FastMealyState<ParameterizedSymbol>> expStates = expMealy.getStates();
         Collection<FastMealyState<ParameterizedSymbol>> actStates = actMealy.getStates();
         Iterator esIt = expStates.iterator();
@@ -211,16 +181,6 @@ public class MyTestFile extends RaLibTestSuite {
                 Assert.assertEquals(at.getOutput().toString(), et.getOutput().toString());
             }
         }
-        // SimulatorSUL dwSUL = new SimulatorSUL(hyp, teachers, consts);
-        // MySUL msu = new MySUL(teachers, dwSUL);
-        // Collection<Transition> startTrs = hyp.getInitialState().getOut();
-        // msu.pre();
-        // for (Transition t: startTrs) {
-        //     ParameterizedSymbol pi = t.getLabel();
-        //     ParameterizedSymbol po = msu.step(pi);
-        //     Assert.assertEquals(po.toString(), pi.toString(), "SUL step input output do not match");
-        // }
-        // msu.post();
     }
 
     @Test
@@ -277,10 +237,8 @@ public class MyTestFile extends RaLibTestSuite {
         expMealy.addTransition(exp1, I_POP, exp3, new OutputSymbol("-") {});
         expMealy.addTransition(exp0, I_POP, exp3, new OutputSymbol("-") {});
 
-        MyRAtoMealyTransformer RAtoM = new MyRAtoMealyTransformer(hyp, alphabet);
-        FastMealy<ParameterizedSymbol, ParameterizedSymbol> actMealy = RAtoM.getMealy();
-        //System.out.println("RA IS: " + hyp.toString());
-
+        MyRAtoMealyTransformer raToM = new MyRAtoMealyTransformer(hyp, alphabet);
+        FastMealy<ParameterizedSymbol, ParameterizedSymbol> actMealy = raToM.getMealy();
         Collection<FastMealyState<ParameterizedSymbol>> expStates = expMealy.getStates();
         Collection<FastMealyState<ParameterizedSymbol>> actStates = actMealy.getStates();
         Iterator esIt = expStates.iterator();
@@ -296,16 +254,6 @@ public class MyTestFile extends RaLibTestSuite {
                 Assert.assertEquals(at.getOutput().toString(), et.getOutput().toString());
             }
         }
-        // SimulatorSUL dwSUL = new SimulatorSUL(hyp, teachers, consts);
-        // MySUL msu = new MySUL(teachers, dwSUL);
-        // Collection<Transition> startTrs = hyp.getInitialState().getOut();
-        // msu.pre();
-        // for (Transition t: startTrs) {
-        //     ParameterizedSymbol pi = t.getLabel();
-        //     ParameterizedSymbol po = msu.step(pi);
-        //     Assert.assertEquals(po.toString(), pi.toString(), "SUL step input output do not match");
-        // }
-        // msu.post();
     }
 
     @Test
@@ -330,10 +278,8 @@ public class MyTestFile extends RaLibTestSuite {
         ralambda.learn();
         MutableRegisterAutomaton hyp = ralambda.getHypothesis();
 
-        MyRAtoMealyTransformer RAtoM = new MyRAtoMealyTransformer(hyp, alphabet);
-        FastMealy<ParameterizedSymbol, ParameterizedSymbol> actMealy = RAtoM.getMealy();
-        //System.out.println("RA IS: " + hyp.toString());
-
+        MyRAtoMealyTransformer raToM = new MyRAtoMealyTransformer(hyp, alphabet);
+        FastMealy<ParameterizedSymbol, ParameterizedSymbol> actMealy = raToM.getMealy();
         FastMealy<ParameterizedSymbol, ParameterizedSymbol> expMealy = new FastMealy<>(alphabet);
         FastMealyState<ParameterizedSymbol> exp0 = expMealy.addInitialState();
         FastMealyState<ParameterizedSymbol> exp1 = expMealy.addState();
@@ -363,16 +309,6 @@ public class MyTestFile extends RaLibTestSuite {
                 Assert.assertEquals(at.getOutput().toString(), et.getOutput().toString());
             }
         }
-        // SimulatorSUL dwSUL = new SimulatorSUL(hyp, teachers, consts);
-        // MySUL msu = new MySUL(teachers, dwSUL);
-        // Collection<de.learnlib.ralib.automata.Transition> startTrs = hyp.getInitialState().getOut();
-        // msu.pre();
-        // for (de.learnlib.ralib.automata.Transition t: startTrs) {
-        //     ParameterizedSymbol pi = t.getLabel();
-        //     ParameterizedSymbol po = msu.step(pi);
-        //     Assert.assertEquals(po.toString(), pi.toString(), "SUL step input output do not match");
-        // }
-        // msu.post();
     }
 
     @Test
@@ -380,8 +316,8 @@ public class MyTestFile extends RaLibTestSuite {
         Alphabet<ParameterizedSymbol> alphabet = new ListAlphabet<>(Arrays.asList(I_PUT, I_GET, O_PUT, O_GET, O_NULL));
         MutableRegisterAutomaton sul = (MutableRegisterAutomaton) de.learnlib.ralib.example.keygen.MapAutomatonExample.AUTOMATON;
 
-        MyRAtoMealyTransformer RAtoM = new MyRAtoMealyTransformer(sul, alphabet);
-        FastMealy<ParameterizedSymbol, ParameterizedSymbol> actMealy = RAtoM.getMealy();
+        MyRAtoMealyTransformer raToM = new MyRAtoMealyTransformer(sul, alphabet);
+        FastMealy<ParameterizedSymbol, ParameterizedSymbol> actMealy = raToM.getMealy();
         System.out.println("RA IS: " + sul.toString());
 
 //         RA IS: l0 (+) (initial):
@@ -464,78 +400,14 @@ public class MyTestFile extends RaLibTestSuite {
         Constants consts = new Constants();
         SimulatorSUL dwSUL = new SimulatorSUL(sul, teachers, consts);
         MySUL msu = new MySUL(teachers, dwSUL);
-        // Collection<Transition> startTrs = sul.getInitialState().getOut();
-        // Iterator it = startTrs.iterator();
-        // Integer len = startTrs.size();
-        // msu.pre();
-        // for (Transition t: startTrs) {
-        //     ParameterizedSymbol pi = t.getLabel();
-        //     System.out.println("PI IS " + pi.toString());
-        //     ParameterizedSymbol po = msu.step(pi);
-        //     System.out.println("PO IS " + po.toString());
-
-        //     msu.PsToPsi(pi);
-        //     // msu.PsToPsi(pi);
-        //     // msu.PsToPsi(pi);
-        //     // msu.PsToPsi(pi);
-        //     // msu.PsToPsi(pi);
-        //     // msu.PsToPsi(pi);
-        //     // msu.PsToPsi(pi);
-        //     // msu.PsToPsi(pi);
-
-        //     //Assert.assertEquals(po.toString(), pi.toString(), "SUL step input output do not match");
-        // }
-        // msu.post();
         MyEquivalenceOracle mO = new MyEquivalenceOracle(sul, alphabet, teachers, msu);
         Collection<PSymbolInstance> clctn = new ArrayList<>();
         PSymbolInstance psi_put = new PSymbolInstance(I_PUT, new DataValue(T_VAL, 0));
         PSymbolInstance psi_get = new PSymbolInstance(I_GET, new DataValue(T_KEY, 0));
         clctn.add(psi_put);
         clctn.add(psi_get);
-
-        // Collection<Transition> startTrs = sul.getInitialState().getOut();
-        // Iterator it = startTrs.iterator();
-        // Integer len = startTrs.size();
-        // for (Transition t: startTrs) {
-        //     ParameterizedSymbol pi = t.getLabel();
-        //     System.out.println("PI IS " + pi.toString());
-        //     PSymbolInstance psi = mO.PsToPsi(pi);
-        //     ParameterizedSymbol po = psi.getBaseSymbol();
-        //     System.out.println("PO IS " + po.toString());
-        //     Assert.assertEquals(po.toString(), pi.toString(), "Oracle PsToPsi inaccurate");
-
-        //     mO.PsToPsi(pi);
-        //     mO.PsToPsi(pi);
-        //     mO.PsToPsi(pi);
-        //     mO.PsToPsi(pi);
-        //     mO.PsToPsi(pi);
-        //     mO.PsToPsi(pi);
-        //     mO.PsToPsi(pi);
-        //     mO.PsToPsi(pi);
-        // }
-
         //CRASHES WHEN FINDING MEALY COUNTER EXAMPLE, EXCEPT ONCE IN A WHILE, BUT RA EXAMPLE IS INCOMPLETE
         DefaultQuery<PSymbolInstance, Boolean> res = mO.findCounterExample(sul, clctn);
-        // Word<PSymbolInstance> ce = res.getInput();
-        // System.out.println("COUNTEREXAMPLE IS: " + res);
-        // System.out.println("COUNTEREXAMPLE INPUT IS: " + ce);
-
-        // for (PSymbolInstance psi : ce) {
-        //     System.out.println(psi);
-        // }
-
-        // Word<ParameterizedSymbol> c = Word.epsilon();
-        // c = c.append(I_PUT);
-        // c = c.append(I_GET);
-
-        // System.out.println("C IS: " + c.toString());
-        // DefaultQuery<ParameterizedSymbol, Boolean> q = new DefaultQuery<>(c, true);
-        // DefaultQuery<PSymbolInstance, Boolean> r = mO.translateCounterExample(q);
-        // Word<PSymbolInstance> ce = r.getInput();
-        // System.out.println("COUNTEREXAMPLE IS: " + r.toString());
-        // for (PSymbolInstance psi : ce) {
-        //     System.out.println(psi);
-        // }
     }
 
 
@@ -559,10 +431,8 @@ public class MyTestFile extends RaLibTestSuite {
         ralambda.setSolver(solver);
         ralambda.learn();
         MutableRegisterAutomaton hyp = ralambda.getHypothesis();
-        MyRAtoMealyTransformer RAtoM = new MyRAtoMealyTransformer(hyp, alphabet);
-        FastMealy<ParameterizedSymbol, ParameterizedSymbol> actMealy = RAtoM.getMealy();
-        //System.out.println("RA IS: " + hyp.toString());
-
+        MyRAtoMealyTransformer raToM = new MyRAtoMealyTransformer(hyp, alphabet);
+        FastMealy<ParameterizedSymbol, ParameterizedSymbol> actMealy = raToM.getMealy();
         FastMealy<ParameterizedSymbol, ParameterizedSymbol> expMealy = new FastMealy<>(alphabet);
         FastMealyState<ParameterizedSymbol> exp0 = expMealy.addInitialState();
         FastMealyState<ParameterizedSymbol> exp1 = expMealy.addState();
@@ -586,16 +456,6 @@ public class MyTestFile extends RaLibTestSuite {
                 Assert.assertEquals(at.getOutput().toString(), et.getOutput().toString());
             }
         }
-        // SimulatorSUL dwSUL = new SimulatorSUL(hyp, teachers, consts);
-        // MySUL msu = new MySUL(teachers, dwSUL);
-        // Collection<de.learnlib.ralib.automata.Transition> startTrs = hyp.getInitialState().getOut();
-        // msu.pre();
-        // for (de.learnlib.ralib.automata.Transition t: startTrs) {
-        //     ParameterizedSymbol pi = t.getLabel();
-        //     ParameterizedSymbol po = msu.step(pi);
-        //     Assert.assertEquals(po.toString(), pi.toString(), "SUL step input output do not match");
-        // }
-        // msu.post();
     }
 
     @Test
@@ -603,8 +463,8 @@ public class MyTestFile extends RaLibTestSuite {
         Alphabet<ParameterizedSymbol> alphabet = new ListAlphabet<>(Arrays.asList(A, B));
         MutableRegisterAutomaton sul = (MutableRegisterAutomaton) de.learnlib.ralib.example.llambda.LLambdaAutomatonExample.AUTOMATON;
 
-        MyRAtoMealyTransformer RAtoM = new MyRAtoMealyTransformer(sul, alphabet);
-        FastMealy<ParameterizedSymbol, ParameterizedSymbol> actMealy = RAtoM.getMealy();
+        MyRAtoMealyTransformer raToM = new MyRAtoMealyTransformer(sul, alphabet);
+        FastMealy<ParameterizedSymbol, ParameterizedSymbol> actMealy = raToM.getMealy();
         //System.out.println("RA IS: " + sul.toString());
 
         FastMealy<ParameterizedSymbol, ParameterizedSymbol> expMealy = new FastMealy<>(alphabet);
@@ -668,8 +528,8 @@ public class MyTestFile extends RaLibTestSuite {
         ralambda.setSolver(solver);
         ralambda.learn();
         MutableRegisterAutomaton hyp = ralambda.getHypothesis();
-        MyRAtoMealyTransformer RAtoM = new MyRAtoMealyTransformer(hyp, alphabet);
-        FastMealy<ParameterizedSymbol, ParameterizedSymbol> actMealy = RAtoM.getMealy();
+        MyRAtoMealyTransformer raToM = new MyRAtoMealyTransformer(hyp, alphabet);
+        FastMealy<ParameterizedSymbol, ParameterizedSymbol> actMealy = raToM.getMealy();
         //System.out.println("RA IS: " + hyp.toString());
 
         FastMealy<ParameterizedSymbol, ParameterizedSymbol> expMealy = new FastMealy<>(alphabet);
@@ -693,28 +553,6 @@ public class MyTestFile extends RaLibTestSuite {
                 Assert.assertEquals(at.getOutput().toString(), et.getOutput().toString());
             }
         }
-        // SimulatorSUL dwSUL = new SimulatorSUL(hyp, teachers, consts);
-        // MySUL msu = new MySUL(teachers, dwSUL);
-        // Collection<de.learnlib.ralib.automata.Transition> startTrs = hyp.getInitialState().getOut();
-        // Iterator it = startTrs.iterator();
-        // Integer len = startTrs.size();
-        // msu.pre();
-        // for (de.learnlib.ralib.automata.Transition t: startTrs) {
-        //     ParameterizedSymbol pi = t.getLabel();
-        //     ParameterizedSymbol po = msu.step(pi);
-
-        //     // msu.PsToPsi(pi);
-        //     // msu.PsToPsi(pi);
-        //     // msu.PsToPsi(pi);
-        //     // msu.PsToPsi(pi);
-        //     // msu.PsToPsi(pi);
-        //     // msu.PsToPsi(pi);
-        //     // msu.PsToPsi(pi);
-        //     // msu.PsToPsi(pi);
-
-        //     //Assert.assertEquals(po.toString(), pi.toString(), "SUL step input output do not match");
-        // }
-        // msu.post();
     }
 
     @Test
@@ -722,10 +560,8 @@ public class MyTestFile extends RaLibTestSuite {
         Alphabet<ParameterizedSymbol> alphabet = new ListAlphabet<>(Arrays.asList(I_REGISTER, I_LOGIN, I_LOGOUT));
         MutableRegisterAutomaton sul = (MutableRegisterAutomaton) de.learnlib.ralib.example.login.LoginAutomatonExample.AUTOMATON;
 
-        MyRAtoMealyTransformer RAtoM = new MyRAtoMealyTransformer(sul, alphabet);
-        FastMealy<ParameterizedSymbol, ParameterizedSymbol> actMealy = RAtoM.getMealy();
-        //System.out.println("RA IS: " + sul.toString());
-
+        MyRAtoMealyTransformer raToM = new MyRAtoMealyTransformer(sul, alphabet);
+        FastMealy<ParameterizedSymbol, ParameterizedSymbol> actMealy = raToM.getMealy();
         FastMealy<ParameterizedSymbol, ParameterizedSymbol> expMealy = new FastMealy<>(alphabet);
         FastMealyState<ParameterizedSymbol> exp0 = expMealy.addInitialState();
         FastMealyState<ParameterizedSymbol> exp1 = expMealy.addState();

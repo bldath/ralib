@@ -20,12 +20,9 @@ public class MySwitchEqOracles implements IOEquivalenceOracle{
     @Override
     public DefaultQuery<PSymbolInstance, Boolean> findCounterExample(RegisterAutomaton ra, Collection<? extends PSymbolInstance> clctn) {
         DefaultQuery<PSymbolInstance, Boolean> counterexample = raMealyOracle.findCounterExample(ra, clctn);
-        if (counterexample == null) { //TODO
+        if (counterexample == null) {
             counterexample = raOracle.findCounterExample(ra, clctn);
         }
         return counterexample;
     }
-
-
-
 }
