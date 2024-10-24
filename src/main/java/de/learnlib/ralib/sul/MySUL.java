@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import de.learnlib.exception.SULException;
-import de.learnlib.ralib.automata.RegisterAutomaton;
-import de.learnlib.ralib.data.Constants;
 import de.learnlib.ralib.data.DataType;
 import de.learnlib.ralib.data.DataValue;
 import de.learnlib.ralib.data.ParValuation;
@@ -21,17 +19,13 @@ import net.automatalib.word.Word;
 
 
 public class MySUL implements SUL<ParameterizedSymbol, ParameterizedSymbol> {
-    private final RegisterAutomaton RA;
     private final DataWordSUL dwSUL;
     private Word<PSymbolInstance> pref = null;
     private final Map<DataType, Theory> teach;
-    private final Constants constants;
 
-    public MySUL(RegisterAutomaton RA, Map<DataType, Theory> teachers,
-            Constants constants, DataWordSUL dwSUL) {
-        this.RA = RA;
+    public MySUL(Map<DataType, Theory> teachers,
+            DataWordSUL dwSUL) {
         this.teach = teachers;
-        this.constants = constants;
         this.dwSUL = dwSUL;
     }
 
@@ -45,7 +39,7 @@ public class MySUL implements SUL<ParameterizedSymbol, ParameterizedSymbol> {
         dwSUL.post();
     }
 
-    public PSymbolInstance PsToPsi(ParameterizedSymbol ps) {
+    private PSymbolInstance psToPsi(ParameterizedSymbol ps) {
         DataValue[] vals = new DataValue[ps.getArity()];
         SymbolicDataValueGenerator.ParameterGenerator pgen = new SymbolicDataValueGenerator.ParameterGenerator();
         ParValuation pval = new ParValuation();
@@ -66,7 +60,7 @@ public class MySUL implements SUL<ParameterizedSymbol, ParameterizedSymbol> {
     }
 
     public ParameterizedSymbol step(ParameterizedSymbol pi) throws SULException {
-        PSymbolInstance psi = PsToPsi(pi);
+        PSymbolInstance psi = psToPsi(pi);
         PSymbolInstance pso = dwSUL.step(psi);
         ParameterizedSymbol po = pso.getBaseSymbol();
         //ParameterizedSymbol po = psi.getBaseSymbol();

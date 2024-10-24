@@ -2,6 +2,7 @@ package de.learnlib.ralib.equivalence;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -13,13 +14,11 @@ import de.learnlib.query.DefaultQuery;
 import de.learnlib.ralib.automata.MutableRegisterAutomaton;
 import de.learnlib.ralib.automata.MyRAtoMealyTransformer;
 import de.learnlib.ralib.automata.RegisterAutomaton;
-import de.learnlib.ralib.data.Constants;
 import de.learnlib.ralib.data.DataType;
 import de.learnlib.ralib.data.DataValue;
 import de.learnlib.ralib.data.ParValuation;
 import de.learnlib.ralib.data.SymbolicDataValue.Parameter;
 import de.learnlib.ralib.data.util.SymbolicDataValueGenerator;
-import de.learnlib.ralib.sul.DataWordSUL;
 import de.learnlib.ralib.sul.MySUL;
 import de.learnlib.ralib.theory.Theory;
 import de.learnlib.ralib.words.DataWords;
@@ -32,22 +31,18 @@ import net.automatalib.word.Word;
 
 
 public class MyEquivalenceOracle implements IOEquivalenceOracle {
-    private final DataWordSUL dwSUL;
     private MutableRegisterAutomaton RA;
     private FastMealy MM;
     private Alphabet<ParameterizedSymbol> alphabet;
     private Map<DataType, Theory> teachers;
-    private Constants consts;
-    private Word<PSymbolInstance> pref;
+    private Word<PSymbolInstance> counterexample;
     private final MySUL mySUL;
 
-    public MyEquivalenceOracle(DataWordSUL dwSUL, MutableRegisterAutomaton RA, Alphabet<ParameterizedSymbol> alphabet, Map<DataType, Theory> teachers, Constants consts, MySUL mySUL) {
-        this.dwSUL = dwSUL;
+    public MyEquivalenceOracle(MutableRegisterAutomaton RA, Alphabet<ParameterizedSymbol> alphabet, Map<DataType, Theory> teachers, MySUL mySUL) {
         this.RA = RA;
         this.alphabet = alphabet;
         this.teachers = teachers;
-        this.consts = consts;
-        this.pref = Word.epsilon();
+        this.counterexample = Word.epsilon();
         this.mySUL = mySUL;
     }
 
@@ -66,14 +61,14 @@ public class MyEquivalenceOracle implements IOEquivalenceOracle {
             i++;
         }
         PSymbolInstance psi = new PSymbolInstance(ps, vals);
-        pref = pref.append(psi);
-        System.out.println("Prefix: " + pref.toString());
+        counterexample = counterexample.append(psi);
+        System.out.println("CE: " + counterexample.toString());
         return psi;
     }
 
     private List<DataValue> computeOld(DataType t, ParValuation pval) {
     java.util.Set<DataValue> set = new java.util.LinkedHashSet<>();
-    set.addAll(DataWords.valSet(pref, t));
+    set.addAll(DataWords.valSet(counterexample, t));
     for (DataValue d : pval.values()){
         if (d.getType().equals(t)) {
             set.add(d);
@@ -82,7 +77,49 @@ public class MyEquivalenceOracle implements IOEquivalenceOracle {
     return new  ArrayList<>(set);
     }
 
-    public DefaultQuery<PSymbolInstance, Object> translateCounterExample(DefaultQuery<ParameterizedSymbol, Object> q) {
+    public DefaultQuery<PSymbolInstance, Boolean> translateCounterExample(DefaultQuery<ParameterizedSymbol, Object> q) {
+        Boolean b = false;
+        Word<ParameterizedSymbol> iWord = q.getInput();
+        if (!(q.getOutput() instanceof Word)) {
+            throw new IllegalStateException("MEALY QUERY OUTPUT ERROR: " + q.getOutput());
+        }
+        Word<ParameterizedSymbol> oWord = (Word<ParameterizedSymbol>) q.getOutput();
+        List<ParameterizedSymbol> oWList = new ArrayList<>();
+        for (ParameterizedSymbol pso: oWord) {
+            oWList.add(pso);
+        }
+        ParameterizedSymbol last = oWList.get(oWList.size() - 1);
+        if (last.toString().equals("+") || last.toString().equals("-")) { //TODO
+            if (last.toString().equals("+")) {
+                b = true;
+            }
+            for (ParameterizedSymbol ps: iWord) {
+                System.out.println("PS " + ps);
+                PSymbolInstance psi = PsToPsi(ps);
+                System.out.println("PSI " + psi);
+                counterexample = counterexample.append(psi);
+            }
+            DefaultQuery<PSymbolInstance, Boolean> qRA = new DefaultQuery<>(this.counterexample, b);
+            return qRA;
+        } else {
+            Iterator oWIt = oWList.iterator();
+            for (ParameterizedSymbol ps: iWord) {
+                System.out.println("PS " + ps);
+                PSymbolInstance psi = PsToPsi(ps);
+                System.out.println("PSI " + psi);
+                counterexample = counterexample.append(psi);
+                ParameterizedSymbol pso = (ParameterizedSymbol) oWIt.next();
+                System.out.println("PSo " + pso);
+                PSymbolInstance psio = PsToPsi(pso);
+                System.out.println("PSIo " + psi);
+                counterexample = counterexample.append(psio);
+            }
+            DefaultQuery<PSymbolInstance, Boolean> qRAo = new DefaultQuery<>(this.counterexample, b);
+            return qRAo;
+        }
+    }
+
+    public DefaultQuery<PSymbolInstance, Object> translateCounterExampleOld(DefaultQuery<ParameterizedSymbol, Object> q) {
         Word<PSymbolInstance> ce = Word.epsilon();
         for (ParameterizedSymbol ps: q.getInput()) {
             System.out.println("PS " + ps);
@@ -91,12 +128,13 @@ public class MyEquivalenceOracle implements IOEquivalenceOracle {
             ce = ce.append(psi);
         }
         if (q.getOutput() instanceof Word) {
+            System.out.println("OUTPUT IS " + q.getOutput());
             Word<ParameterizedSymbol> qo = (Word<ParameterizedSymbol>) q.getOutput();
             Word<PSymbolInstance> ceo = Word.epsilon();
             for (ParameterizedSymbol ps: qo) {
-                System.out.println("PS " + ps);
+                System.out.println("PSo " + ps);
                 PSymbolInstance psi = PsToPsi(ps);
-                System.out.println("PSI " + psi);
+                System.out.println("PSIo " + psi);
                 ceo = ceo.append(psi);
             }
             DefaultQuery<PSymbolInstance, Object> qRAo = new DefaultQuery<>(ce, ceo);
@@ -106,7 +144,7 @@ public class MyEquivalenceOracle implements IOEquivalenceOracle {
         return qRA;
     }
 
-    @Override
+    @Override //TODO: When no counterexample
     public DefaultQuery<PSymbolInstance, Boolean> findCounterExample(
             RegisterAutomaton a, Collection<? extends PSymbolInstance> clctn) {
                 MyRAtoMealyTransformer RAtoM = new MyRAtoMealyTransformer(RA, alphabet);
@@ -126,9 +164,9 @@ public class MyEquivalenceOracle implements IOEquivalenceOracle {
                     System.out.println("Mealy counterexample input: " + qM.getInput() + " and output boolean: " + tmpB);
                 }
                 System.out.println("Generated mealy counterexample: " + qM.toString());
-                DefaultQuery<PSymbolInstance, Object> qRA = translateCounterExample(qM);
+                DefaultQuery<PSymbolInstance, Boolean> qRA = translateCounterExample(qM);
                 System.out.println("Translated counterexample: " + qRA.toString());
-                return new DefaultQuery<PSymbolInstance, Boolean>(qRA.getInput(), true);//TODO
+                return qRA;
             }
 
     private Collection<ParameterizedSymbol> alphabetTranslator (Collection<PSymbolInstance> psiAlph) {

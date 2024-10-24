@@ -97,7 +97,6 @@ public class MyRAtoMealyTransformer {
                     for (Transition fdt : fromDestTrs) {
                         RALocation destLoc2 = fdt.getDestination();
                         ParameterizedSymbol os = fdt.getLabel();
-                        //TODO
                         if (KeepTransition(fdt).equals(true)) {
                             if (!this.lookupStates.containsKey(destLoc2)) {
                                 FastMealyState<ParameterizedSymbol> mState2 = mealy.addState();

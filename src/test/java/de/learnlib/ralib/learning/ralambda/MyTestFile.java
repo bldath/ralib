@@ -113,7 +113,7 @@ public class MyTestFile extends RaLibTestSuite {
             }
         }
         // SimulatorSUL dwSUL = new SimulatorSUL(hyp, teachers, consts);
-        // MySUL msu = new MySUL(hyp, teachers, consts, dwSUL);
+        // MySUL msu = new MySUL(teachers, dwSUL);
         // Collection<Transition> startTrs = hyp.getInitialState().getOut();
         // msu.pre();
         // for (Transition t: startTrs) {
@@ -197,7 +197,7 @@ public class MyTestFile extends RaLibTestSuite {
             }
         }
         // SimulatorSUL dwSUL = new SimulatorSUL(hyp, teachers, consts);
-        // MySUL msu = new MySUL(hyp, teachers, consts, dwSUL);
+        // MySUL msu = new MySUL(teachers, dwSUL);
         // Collection<Transition> startTrs = hyp.getInitialState().getOut();
         // msu.pre();
         // for (Transition t: startTrs) {
@@ -282,7 +282,7 @@ public class MyTestFile extends RaLibTestSuite {
             }
         }
         // SimulatorSUL dwSUL = new SimulatorSUL(hyp, teachers, consts);
-        // MySUL msu = new MySUL(hyp, teachers, consts, dwSUL);
+        // MySUL msu = new MySUL(teachers, dwSUL);
         // Collection<Transition> startTrs = hyp.getInitialState().getOut();
         // msu.pre();
         // for (Transition t: startTrs) {
@@ -349,7 +349,7 @@ public class MyTestFile extends RaLibTestSuite {
             }
         }
         // SimulatorSUL dwSUL = new SimulatorSUL(hyp, teachers, consts);
-        // MySUL msu = new MySUL(hyp, teachers, consts, dwSUL);
+        // MySUL msu = new MySUL(teachers, dwSUL);
         // Collection<de.learnlib.ralib.automata.Transition> startTrs = hyp.getInitialState().getOut();
         // msu.pre();
         // for (de.learnlib.ralib.automata.Transition t: startTrs) {
@@ -448,7 +448,7 @@ public class MyTestFile extends RaLibTestSuite {
         teachers.put(T_VAL, new IntegerEqualityTheory(T_VAL));
         Constants consts = new Constants();
         SimulatorSUL dwSUL = new SimulatorSUL(sul, teachers, consts);
-        MySUL msu = new MySUL(sul, teachers, consts, dwSUL);
+        MySUL msu = new MySUL(teachers, dwSUL);
         // Collection<Transition> startTrs = sul.getInitialState().getOut();
         // Iterator it = startTrs.iterator();
         // Integer len = startTrs.size();
@@ -471,7 +471,7 @@ public class MyTestFile extends RaLibTestSuite {
         //     //Assert.assertEquals(po.toString(), pi.toString(), "SUL step input output do not match");
         // }
         // msu.post();
-        MyEquivalenceOracle mO = new MyEquivalenceOracle(dwSUL, sul, alphabet, teachers, consts, msu);
+        MyEquivalenceOracle mO = new MyEquivalenceOracle(sul, alphabet, teachers, msu);
         Collection<PSymbolInstance> clctn = new ArrayList<>();
         PSymbolInstance psi_put = new PSymbolInstance(I_PUT, new DataValue(T_VAL, 0));
         PSymbolInstance psi_get = new PSymbolInstance(I_GET, new DataValue(T_KEY, 0));
@@ -572,7 +572,7 @@ public class MyTestFile extends RaLibTestSuite {
             }
         }
         // SimulatorSUL dwSUL = new SimulatorSUL(hyp, teachers, consts);
-        // MySUL msu = new MySUL(hyp, teachers, consts, dwSUL);
+        // MySUL msu = new MySUL(teachers, dwSUL);
         // Collection<de.learnlib.ralib.automata.Transition> startTrs = hyp.getInitialState().getOut();
         // msu.pre();
         // for (de.learnlib.ralib.automata.Transition t: startTrs) {
@@ -679,7 +679,7 @@ public class MyTestFile extends RaLibTestSuite {
             }
         }
         // SimulatorSUL dwSUL = new SimulatorSUL(hyp, teachers, consts);
-        // MySUL msu = new MySUL(hyp, teachers, consts, dwSUL);
+        // MySUL msu = new MySUL(teachers, dwSUL);
         // Collection<de.learnlib.ralib.automata.Transition> startTrs = hyp.getInitialState().getOut();
         // Iterator it = startTrs.iterator();
         // Integer len = startTrs.size();
