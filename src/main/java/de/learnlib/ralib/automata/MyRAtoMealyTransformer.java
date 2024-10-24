@@ -16,6 +16,7 @@ import de.learnlib.ralib.automata.guards.Negation;
 import de.learnlib.ralib.automata.guards.Relation;
 import de.learnlib.ralib.automata.guards.TrueGuardExpression;
 import de.learnlib.ralib.automata.output.OutputTransition;
+import de.learnlib.ralib.words.OutputSymbol;
 import de.learnlib.ralib.words.ParameterizedSymbol;
 import net.automatalib.alphabet.Alphabet;
 import net.automatalib.automaton.transducer.FastMealy;
@@ -94,10 +95,12 @@ public class MyRAtoMealyTransformer {
                 RALocation destLoc = t.getDestination();
                 if (outputStates.contains(destLoc)) {
                     Collection<Transition> fromDestTrs = destLoc.getOut();
+                    Integer count = 0;
                     for (Transition fdt : fromDestTrs) {
                         RALocation destLoc2 = fdt.getDestination();
                         ParameterizedSymbol os = fdt.getLabel();
                         if (keepTransition(fdt).equals(true)) {
+                            count++;
                             if (!this.lookupStates.containsKey(destLoc2)) {
                                 FastMealyState<ParameterizedSymbol> mState2 = mealy.addState();
                                 this.lookupStates.put(destLoc2, mState2);
@@ -110,12 +113,15 @@ public class MyRAtoMealyTransformer {
                             }
                         }
                     }
+                    if (count > 1) {
+                        throw new IllegalStateException("TOO MANY OUTPUT TRANSITIONS IN LOC " + destLoc.toString());
+                    }
                 } else {
-                    ParameterizedSymbol output;
+                    OutputSymbol output;
                     if (destLoc.isAccepting()) {
-                    output = new ParameterizedSymbol("+") {};
+                    output = new OutputSymbol("+") {};
                     } else {
-                        output = new ParameterizedSymbol("-") {};
+                        output = new OutputSymbol("-") {};
                     }
                     if (!this.lookupStates.containsKey(destLoc)) {
                         FastMealyState<ParameterizedSymbol> mState = mealy.addState();
@@ -272,9 +278,9 @@ public class MyRAtoMealyTransformer {
                     } else {
                         ParameterizedSymbol output;
                             if (destLoc.isAccepting()) {
-                                output = new ParameterizedSymbol("+") {};
+                                output = new OutputSymbol("+") {};
                             } else {
-                                output = new ParameterizedSymbol("-") {};
+                                output = new OutputSymbol("-") {};
                             }
                         if (!this.lookupStates.containsKey(destLoc)) {
                             FastMealyState<ParameterizedSymbol> mState = mealy.addState();

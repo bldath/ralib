@@ -55,6 +55,8 @@ import de.learnlib.ralib.sul.MySUL;
 import de.learnlib.ralib.sul.SimulatorSUL;
 import de.learnlib.ralib.theory.Theory;
 import de.learnlib.ralib.tools.theories.IntegerEqualityTheory;
+import de.learnlib.ralib.words.InputSymbol;
+import de.learnlib.ralib.words.OutputSymbol;
 import de.learnlib.ralib.words.PSymbolInstance;
 import de.learnlib.ralib.words.ParameterizedSymbol;
 import net.automatalib.alphabet.Alphabet;
@@ -92,10 +94,10 @@ public class MyTestFile extends RaLibTestSuite {
         FastMealy<ParameterizedSymbol, ParameterizedSymbol> expMealy = new FastMealy<>(alphabet);
         FastMealyState<ParameterizedSymbol> exp0 = expMealy.addInitialState();
         FastMealyState<ParameterizedSymbol> exp1 = expMealy.addState();
-        expMealy.addTransition(exp0, I_PUSH, exp0, new ParameterizedSymbol("+") {});
-        expMealy.addTransition(exp0, I_POP, exp1, new ParameterizedSymbol("-") {});
-        expMealy.addTransition(exp1, I_PUSH, exp1, new ParameterizedSymbol("-") {});
-        expMealy.addTransition(exp1, I_POP, exp1, new ParameterizedSymbol("-") {});
+        expMealy.addTransition(exp0, I_PUSH, exp0, new OutputSymbol("+") {});
+        expMealy.addTransition(exp0, I_POP, exp1, new OutputSymbol("-") {});
+        expMealy.addTransition(exp1, I_PUSH, exp1, new OutputSymbol("-") {});
+        expMealy.addTransition(exp1, I_POP, exp1, new OutputSymbol("-") {});
 
         Collection<FastMealyState<ParameterizedSymbol>> expStates = expMealy.getStates();
         Collection<FastMealyState<ParameterizedSymbol>> actStates = actMealy.getStates();
@@ -108,10 +110,23 @@ public class MyTestFile extends RaLibTestSuite {
             Iterator etIt = expTrs.iterator();
             for (MealyTransition at: actTrs){
                 MealyTransition et = (MealyTransition) etIt.next();
+                System.out.println(at.getOutput().toString());
                 Assert.assertEquals(at.getSuccessor().toString(), et.getSuccessor().toString());
                 Assert.assertEquals(at.getOutput().toString(), et.getOutput().toString());
             }
         }
+        // ParameterizedSymbol p1 = new ParameterizedSymbol("+") {};
+        // ParameterizedSymbol p2 = new ParameterizedSymbol("-") {};
+        // InputSymbol p3 = new InputSymbol("+") {};
+        // InputSymbol p4 = new InputSymbol("-") {};
+        // OutputSymbol p5 = new OutputSymbol("+") {};
+        // OutputSymbol p6 = new OutputSymbol("-") {};
+        // System.out.println(p1.toString());
+        // System.out.println(p2.toString());
+        // System.out.println(p3.toString());
+        // System.out.println(p4.toString());
+        // System.out.println(p5.toString());
+        // System.out.println(p6.toString());
         // SimulatorSUL dwSUL = new SimulatorSUL(hyp, teachers, consts);
         // MySUL msu = new MySUL(teachers, dwSUL);
         // Collection<Transition> startTrs = hyp.getInitialState().getOut();
@@ -168,14 +183,14 @@ public class MyTestFile extends RaLibTestSuite {
         FastMealyState<ParameterizedSymbol> exp1 = expMealy.addState();
         FastMealyState<ParameterizedSymbol> exp2 = expMealy.addState();
         FastMealyState<ParameterizedSymbol> exp3 = expMealy.addState();
-        expMealy.addTransition(exp0, I_PUSH, exp1, new ParameterizedSymbol("+") {});
-        expMealy.addTransition(exp1, I_POP, exp2, new ParameterizedSymbol("-") {});
-        expMealy.addTransition(exp2, I_PUSH, exp2, new ParameterizedSymbol("-") {});
-        expMealy.addTransition(exp2, I_POP, exp2, new ParameterizedSymbol("-") {});
-        expMealy.addTransition(exp1, I_PUSH, exp3, new ParameterizedSymbol("+") {});
-        expMealy.addTransition(exp3, I_POP, exp2, new ParameterizedSymbol("-") {});
-        expMealy.addTransition(exp3, I_PUSH, exp2, new ParameterizedSymbol("-") {});
-        expMealy.addTransition(exp0, I_POP, exp2, new ParameterizedSymbol("-") {});
+        expMealy.addTransition(exp0, I_PUSH, exp1, new OutputSymbol("+") {});
+        expMealy.addTransition(exp1, I_POP, exp2, new OutputSymbol("-") {});
+        expMealy.addTransition(exp2, I_PUSH, exp2, new OutputSymbol("-") {});
+        expMealy.addTransition(exp2, I_POP, exp2, new OutputSymbol("-") {});
+        expMealy.addTransition(exp1, I_PUSH, exp3, new OutputSymbol("+") {});
+        expMealy.addTransition(exp3, I_POP, exp2, new OutputSymbol("-") {});
+        expMealy.addTransition(exp3, I_PUSH, exp2, new OutputSymbol("-") {});
+        expMealy.addTransition(exp0, I_POP, exp2, new OutputSymbol("-") {});
 
         MyRAtoMealyTransformer RAtoM = new MyRAtoMealyTransformer(hyp, alphabet);
         FastMealy<ParameterizedSymbol, ParameterizedSymbol> actMealy = RAtoM.getMealy();
@@ -253,14 +268,14 @@ public class MyTestFile extends RaLibTestSuite {
         FastMealyState<ParameterizedSymbol> exp1 = expMealy.addState();
         FastMealyState<ParameterizedSymbol> exp2 = expMealy.addState();
         FastMealyState<ParameterizedSymbol> exp3 = expMealy.addState();
-        expMealy.addTransition(exp0, I_PUSH, exp1, new ParameterizedSymbol("+") {});
-        expMealy.addTransition(exp1, I_PUSH, exp2, new ParameterizedSymbol("+") {});
-        expMealy.addTransition(exp2, I_POP, exp3, new ParameterizedSymbol("-") {});
-        expMealy.addTransition(exp3, I_PUSH, exp3, new ParameterizedSymbol("-") {});
-        expMealy.addTransition(exp3, I_POP, exp3, new ParameterizedSymbol("-") {});
-        expMealy.addTransition(exp2, I_PUSH, exp3, new ParameterizedSymbol("-") {});
-        expMealy.addTransition(exp1, I_POP, exp3, new ParameterizedSymbol("-") {});
-        expMealy.addTransition(exp0, I_POP, exp3, new ParameterizedSymbol("-") {});
+        expMealy.addTransition(exp0, I_PUSH, exp1, new OutputSymbol("+") {});
+        expMealy.addTransition(exp1, I_PUSH, exp2, new OutputSymbol("+") {});
+        expMealy.addTransition(exp2, I_POP, exp3, new OutputSymbol("-") {});
+        expMealy.addTransition(exp3, I_PUSH, exp3, new OutputSymbol("-") {});
+        expMealy.addTransition(exp3, I_POP, exp3, new OutputSymbol("-") {});
+        expMealy.addTransition(exp2, I_PUSH, exp3, new OutputSymbol("-") {});
+        expMealy.addTransition(exp1, I_POP, exp3, new OutputSymbol("-") {});
+        expMealy.addTransition(exp0, I_POP, exp3, new OutputSymbol("-") {});
 
         MyRAtoMealyTransformer RAtoM = new MyRAtoMealyTransformer(hyp, alphabet);
         FastMealy<ParameterizedSymbol, ParameterizedSymbol> actMealy = RAtoM.getMealy();
@@ -322,16 +337,16 @@ public class MyTestFile extends RaLibTestSuite {
         FastMealy<ParameterizedSymbol, ParameterizedSymbol> expMealy = new FastMealy<>(alphabet);
         FastMealyState<ParameterizedSymbol> exp0 = expMealy.addInitialState();
         FastMealyState<ParameterizedSymbol> exp1 = expMealy.addState();
-        expMealy.addTransition(exp0, I_PUT, exp0, new ParameterizedSymbol("+") {});
-        expMealy.addTransition(exp1, I_PUT, exp1, new ParameterizedSymbol("-") {});
-        expMealy.addTransition(exp1, I_GET, exp1, new ParameterizedSymbol("-") {});
-        expMealy.addTransition(exp1, O_PUT, exp1, new ParameterizedSymbol("-") {});
-        expMealy.addTransition(exp1, O_GET, exp1, new ParameterizedSymbol("-") {});
-        expMealy.addTransition(exp1, O_NULL, exp1, new ParameterizedSymbol("-") {});
-        expMealy.addTransition(exp0, I_GET, exp1, new ParameterizedSymbol("-") {});
-        expMealy.addTransition(exp0, O_PUT, exp1, new ParameterizedSymbol("-") {});
-        expMealy.addTransition(exp0, O_GET, exp1, new ParameterizedSymbol("-") {});
-        expMealy.addTransition(exp0, O_NULL, exp1, new ParameterizedSymbol("-") {});
+        expMealy.addTransition(exp0, I_PUT, exp0, new OutputSymbol("+") {});
+        expMealy.addTransition(exp1, I_PUT, exp1, new OutputSymbol("-") {});
+        expMealy.addTransition(exp1, I_GET, exp1, new OutputSymbol("-") {});
+        expMealy.addTransition(exp1, O_PUT, exp1, new OutputSymbol("-") {});
+        expMealy.addTransition(exp1, O_GET, exp1, new OutputSymbol("-") {});
+        expMealy.addTransition(exp1, O_NULL, exp1, new OutputSymbol("-") {});
+        expMealy.addTransition(exp0, I_GET, exp1, new OutputSymbol("-") {});
+        expMealy.addTransition(exp0, O_PUT, exp1, new OutputSymbol("-") {});
+        expMealy.addTransition(exp0, O_GET, exp1, new OutputSymbol("-") {});
+        expMealy.addTransition(exp0, O_NULL, exp1, new OutputSymbol("-") {});
 
         Collection<FastMealyState<ParameterizedSymbol>> expStates = expMealy.getStates();
         Collection<FastMealyState<ParameterizedSymbol>> actStates = actMealy.getStates();
@@ -551,10 +566,10 @@ public class MyTestFile extends RaLibTestSuite {
         FastMealy<ParameterizedSymbol, ParameterizedSymbol> expMealy = new FastMealy<>(alphabet);
         FastMealyState<ParameterizedSymbol> exp0 = expMealy.addInitialState();
         FastMealyState<ParameterizedSymbol> exp1 = expMealy.addState();
-        expMealy.addTransition(exp0, A, exp1, new ParameterizedSymbol("-") {});
-        expMealy.addTransition(exp1, A, exp1, new ParameterizedSymbol("-") {});
-        expMealy.addTransition(exp1, B, exp1, new ParameterizedSymbol("-") {});
-        expMealy.addTransition(exp0, B, exp1, new ParameterizedSymbol("-") {});
+        expMealy.addTransition(exp0, A, exp1, new OutputSymbol("-") {});
+        expMealy.addTransition(exp1, A, exp1, new OutputSymbol("-") {});
+        expMealy.addTransition(exp1, B, exp1, new OutputSymbol("-") {});
+        expMealy.addTransition(exp0, B, exp1, new OutputSymbol("-") {});
 
         Collection<FastMealyState<ParameterizedSymbol>> expStates = expMealy.getStates();
         Collection<FastMealyState<ParameterizedSymbol>> actStates = actMealy.getStates();
@@ -600,20 +615,20 @@ public class MyTestFile extends RaLibTestSuite {
         FastMealyState<ParameterizedSymbol> exp4 = expMealy.addState();
         FastMealyState<ParameterizedSymbol> exp5 = expMealy.addState();
         FastMealyState<ParameterizedSymbol> exp6 = expMealy.addState();
-        expMealy.addTransition(exp0, A, exp1, new ParameterizedSymbol("-") {});
-        expMealy.addTransition(exp0, B, exp6, new ParameterizedSymbol("-") {});
-        expMealy.addTransition(exp1, A, exp2, new ParameterizedSymbol("-") {});
-        expMealy.addTransition(exp1, B, exp6, new ParameterizedSymbol("-") {});
-        expMealy.addTransition(exp2, A, exp3, new ParameterizedSymbol("-") {});
-        expMealy.addTransition(exp2, B, exp5, new ParameterizedSymbol("-") {});
-        expMealy.addTransition(exp3, A, exp4, new ParameterizedSymbol("+") {});
-        expMealy.addTransition(exp3, B, exp3, new ParameterizedSymbol("-") {});
-        expMealy.addTransition(exp4, A, exp4, new ParameterizedSymbol("+") {});
-        expMealy.addTransition(exp4, B, exp4, new ParameterizedSymbol("+") {});
-        expMealy.addTransition(exp5, A, exp2, new ParameterizedSymbol("-") {});
-        expMealy.addTransition(exp5, B, exp0, new ParameterizedSymbol("+") {});
-        expMealy.addTransition(exp6, A, exp2, new ParameterizedSymbol("-") {});
-        expMealy.addTransition(exp6, B, exp5, new ParameterizedSymbol("-") {});
+        expMealy.addTransition(exp0, A, exp1, new OutputSymbol("-") {});
+        expMealy.addTransition(exp0, B, exp6, new OutputSymbol("-") {});
+        expMealy.addTransition(exp1, A, exp2, new OutputSymbol("-") {});
+        expMealy.addTransition(exp1, B, exp6, new OutputSymbol("-") {});
+        expMealy.addTransition(exp2, A, exp3, new OutputSymbol("-") {});
+        expMealy.addTransition(exp2, B, exp5, new OutputSymbol("-") {});
+        expMealy.addTransition(exp3, A, exp4, new OutputSymbol("+") {});
+        expMealy.addTransition(exp3, B, exp3, new OutputSymbol("-") {});
+        expMealy.addTransition(exp4, A, exp4, new OutputSymbol("+") {});
+        expMealy.addTransition(exp4, B, exp4, new OutputSymbol("+") {});
+        expMealy.addTransition(exp5, A, exp2, new OutputSymbol("-") {});
+        expMealy.addTransition(exp5, B, exp0, new OutputSymbol("+") {});
+        expMealy.addTransition(exp6, A, exp2, new OutputSymbol("-") {});
+        expMealy.addTransition(exp6, B, exp5, new OutputSymbol("-") {});
 
         Collection<FastMealyState<ParameterizedSymbol>> expStates = expMealy.getStates();
         Collection<FastMealyState<ParameterizedSymbol>> actStates = actMealy.getStates();
@@ -659,9 +674,9 @@ public class MyTestFile extends RaLibTestSuite {
 
         FastMealy<ParameterizedSymbol, ParameterizedSymbol> expMealy = new FastMealy<>(alphabet);
         FastMealyState<ParameterizedSymbol> exp0 = expMealy.addInitialState();
-        expMealy.addTransition(exp0, I_REGISTER, exp0, new ParameterizedSymbol("-") {});
-        expMealy.addTransition(exp0, I_LOGIN, exp0, new ParameterizedSymbol("-") {});
-        expMealy.addTransition(exp0, I_LOGOUT, exp0, new ParameterizedSymbol("-") {});
+        expMealy.addTransition(exp0, I_REGISTER, exp0, new OutputSymbol("-") {});
+        expMealy.addTransition(exp0, I_LOGIN, exp0, new OutputSymbol("-") {});
+        expMealy.addTransition(exp0, I_LOGOUT, exp0, new OutputSymbol("-") {});
 
         Collection<FastMealyState<ParameterizedSymbol>> expStates = expMealy.getStates();
         Collection<FastMealyState<ParameterizedSymbol>> actStates = actMealy.getStates();
@@ -714,8 +729,8 @@ public class MyTestFile extends RaLibTestSuite {
         FastMealy<ParameterizedSymbol, ParameterizedSymbol> expMealy = new FastMealy<>(alphabet);
         FastMealyState<ParameterizedSymbol> exp0 = expMealy.addInitialState();
         FastMealyState<ParameterizedSymbol> exp1 = expMealy.addState();
-        expMealy.addTransition(exp0, I_REGISTER, exp1, new ParameterizedSymbol("-") {});
-        expMealy.addTransition(exp1, I_LOGIN, exp1, new ParameterizedSymbol("-") {});
+        expMealy.addTransition(exp0, I_REGISTER, exp1, new OutputSymbol("-") {});
+        expMealy.addTransition(exp1, I_LOGIN, exp1, new OutputSymbol("-") {});
 
         Collection<FastMealyState<ParameterizedSymbol>> expStates = expMealy.getStates();
         Collection<FastMealyState<ParameterizedSymbol>> actStates = actMealy.getStates();

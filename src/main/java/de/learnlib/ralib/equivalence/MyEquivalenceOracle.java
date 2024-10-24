@@ -89,8 +89,8 @@ public class MyEquivalenceOracle implements IOEquivalenceOracle {
             oWList.add(pso);
         }
         ParameterizedSymbol last = oWList.get(oWList.size() - 1);
-        if (last.toString().equals("+") || last.toString().equals("-")) { //TODO
-            if (last.toString().equals("+")) {
+        if (last.getName().equals("+[]") || last.getName().equals("-[]")) {
+            if (last.getName().equals("+[]")) {
                 b = true;
             }
             for (ParameterizedSymbol ps: iWord) {
