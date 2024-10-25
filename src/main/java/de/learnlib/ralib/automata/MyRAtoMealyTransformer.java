@@ -227,12 +227,13 @@ public class MyRAtoMealyTransformer {
                     RALocation destLoc = t.getDestination();
                     ParameterizedSymbol symb = t.getLabel();
                     if (outputStates.contains(destLoc)) {
+                        Integer count = 0;
                         Collection<Transition> fromDestTrs = destLoc.getOut();
                         for (Transition fdt : fromDestTrs) {
                             RALocation destLoc2 = fdt.getDestination();
                             ParameterizedSymbol os = fdt.getLabel();
-                            //TODO
                             if (keepTransition(fdt).equals(true)) {
+                                count++;
                                 if (!this.lookupStates.containsKey(destLoc2)) {
                                     FastMealyState<ParameterizedSymbol> mState2 = mealy.addState();
                                     this.lookupStates.put(destLoc2, mState2);
@@ -244,6 +245,9 @@ public class MyRAtoMealyTransformer {
                                     //System.out.print("FROM_4 " + mealy.getState(this.lookupStates.get(sourceLoc).getId()) + " TO " + mealy.getTransition(this.lookupStates.get(sourceLoc), symb).getSuccessor() + " " + symb.toString() + " WITH OUTPUT " + mealy.getTransition(this.lookupStates.get(sourceLoc), symb).getOutput() + "\n");
                                 }
                             }
+                        }
+                        if (count > 1) {
+                            throw new IllegalStateException("TOO MANY OUTPUT TRANSITIONS IN LOC " + destLoc.toString());
                         }
                     } else {
                         ParameterizedSymbol output;
