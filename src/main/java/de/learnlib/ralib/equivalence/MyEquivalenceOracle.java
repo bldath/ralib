@@ -35,7 +35,7 @@ public class MyEquivalenceOracle implements IOEquivalenceOracle {
     private Alphabet<ParameterizedSymbol> alphabet;
     private Map<DataType, Theory> teachers;
     private Word<PSymbolInstance> counterexample;
-    private final MySUL mySUL;
+    private MySUL mySUL;
     private Collection<ParameterizedSymbol> inputAlph;
 
     public MyEquivalenceOracle(Alphabet<ParameterizedSymbol> alphabet, MySUL mySUL) {
@@ -45,6 +45,35 @@ public class MyEquivalenceOracle implements IOEquivalenceOracle {
         this.counterexample = Word.epsilon();
         this.mySUL = mySUL;
         this.teachers = mySUL.getTeachers();
+    }
+
+    public void setHypothesis(MutableRegisterAutomaton ra) {
+        this.ra = ra;
+    }
+
+    public void setAlphabet(Alphabet<ParameterizedSymbol> alphabet) {
+        this.alphabet = alphabet;
+    }
+
+    public void makeInputAlphabet(Alphabet<ParameterizedSymbol> alphabet) {
+        for (ParameterizedSymbol ps : alphabet) {
+            if (!(ps instanceof OutputSymbol)) {
+                this.inputAlph.add(ps);
+            }
+        }
+    }
+
+    public void setMealy(FastMealy mealyMachine) {
+        this.mealyMachine = mealyMachine;
+    }
+
+    public void setSUL(MySUL mySUL) {
+        this.mySUL = mySUL;
+        this.teachers = mySUL.getTeachers();
+    }
+
+    public void setEpsilonCounterExample() {
+        this.counterexample = Word.epsilon();
     }
 
     private PSymbolInstance PsToPsi(ParameterizedSymbol ps) {
@@ -107,14 +136,6 @@ public class MyEquivalenceOracle implements IOEquivalenceOracle {
             }
             DefaultQuery<PSymbolInstance, Boolean> qRAo = new DefaultQuery<>(this.counterexample, b);
             return qRAo;
-        }
-    }
-
-    private void makeInputAlphabet(Alphabet<ParameterizedSymbol> alphabet) {
-        for (ParameterizedSymbol ps : alphabet) {
-            if (!(ps instanceof OutputSymbol)) {
-                this.inputAlph.add(ps);
-            }
         }
     }
 
