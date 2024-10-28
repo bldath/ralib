@@ -3,7 +3,6 @@ package de.learnlib.ralib.equivalence;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -26,7 +25,6 @@ import de.learnlib.ralib.words.OutputSymbol;
 import de.learnlib.ralib.words.PSymbolInstance;
 import de.learnlib.ralib.words.ParameterizedSymbol;
 import net.automatalib.alphabet.Alphabet;
-import net.automatalib.alphabet.ListAlphabet;
 import net.automatalib.automaton.transducer.FastMealy;
 import net.automatalib.word.Word;
 
@@ -38,20 +36,18 @@ public class MyEquivalenceOracle implements IOEquivalenceOracle {
     private Map<DataType, Theory> teachers;
     private Word<PSymbolInstance> counterexample;
     private final MySUL mySUL;
+    private Collection<ParameterizedSymbol> inputAlph;
 
-    public MyEquivalenceOracle(MutableRegisterAutomaton ra, Alphabet<ParameterizedSymbol> alphabet, Map<DataType, Theory> teachers, MySUL mySUL) {
-        this.ra = ra;
+    public MyEquivalenceOracle(Alphabet<ParameterizedSymbol> alphabet, MySUL mySUL) {
+        this.inputAlph = new ArrayList<>();
         this.alphabet = alphabet;
-        this.teachers = teachers;
+        makeInputAlphabet(alphabet);
         this.counterexample = Word.epsilon();
         this.mySUL = mySUL;
+        this.teachers = mySUL.getTeachers();
     }
 
-    public void setHypothesis(MutableRegisterAutomaton ra) {
-    	this.ra = ra;
-    }
-
-    public PSymbolInstance PsToPsi(ParameterizedSymbol ps) {
+    private PSymbolInstance PsToPsi(ParameterizedSymbol ps) {
         DataValue[] vals = new DataValue[ps.getArity()];
         SymbolicDataValueGenerator.ParameterGenerator pgen = new SymbolicDataValueGenerator.ParameterGenerator();
         ParValuation pval = new ParValuation();
@@ -81,7 +77,7 @@ public class MyEquivalenceOracle implements IOEquivalenceOracle {
     return new  ArrayList<>(set);
     }
 
-    public DefaultQuery<PSymbolInstance, Boolean> translateCounterExample(DefaultQuery<ParameterizedSymbol, Object> q) {
+    private DefaultQuery<PSymbolInstance, Boolean> translateCounterExample(DefaultQuery<ParameterizedSymbol, Object> q) {
         Boolean b = false;
         if (!(q.getOutput() instanceof Word)) {
             throw new IllegalStateException("MEALY QUERY OUTPUT ERROR: " + q.getOutput());
@@ -114,17 +110,25 @@ public class MyEquivalenceOracle implements IOEquivalenceOracle {
         }
     }
 
+    private void makeInputAlphabet(Alphabet<ParameterizedSymbol> alphabet) {
+        for (ParameterizedSymbol ps : alphabet) {
+            if (!(ps instanceof OutputSymbol)) {
+                this.inputAlph.add(ps);
+            }
+        }
+    }
+
     @Override
     public DefaultQuery<PSymbolInstance, Boolean> findCounterExample(
-            RegisterAutomaton a, Collection<? extends PSymbolInstance> clctn) {
-                MyRAtoMealyTransformer raToM = new MyRAtoMealyTransformer(ra, alphabet);
+            RegisterAutomaton ra, Collection<? extends PSymbolInstance> clctn) {
+                this.ra = (MutableRegisterAutomaton) ra;
+                MyRAtoMealyTransformer raToM = new MyRAtoMealyTransformer(this.ra, this.alphabet);
                 this.mealyMachine = raToM.getMealy();
                 System.out.println("Made mealy");
                 MembershipOracle mSul = new SULOracle(mySUL);
                 RandomWpMethodEQOracle rwpO = new RandomWpMethodEQOracle<>(mSul, 0, 2); //FIX INTS
                 System.out.println("Made RWPEQOracle");
-                Collection<ParameterizedSymbol> inputAlph = alphabetTranslator((Collection<PSymbolInstance>) clctn);
-                System.out.println("Made inputalphabet: " + inputAlph.toString());
+                System.out.println("Inputalphabet is: " + inputAlph.toString());
                 DefaultQuery<ParameterizedSymbol, Object> qM = rwpO.findCounterExample(mealyMachine, inputAlph);
                 if (qM == null) {
                     System.out.println("No more mealy counterexample");
@@ -135,15 +139,4 @@ public class MyEquivalenceOracle implements IOEquivalenceOracle {
                 System.out.println("Translated counterexample: " + qRA.toString());
                 return qRA;
             }
-
-    private Collection<ParameterizedSymbol> alphabetTranslator (Collection<PSymbolInstance> psiAlph) {
-        List<ParameterizedSymbol> tmpList = new LinkedList<>();
-        for (PSymbolInstance psi : psiAlph) {
-            ParameterizedSymbol ps = psi.getBaseSymbol();
-            tmpList.add(ps);
-        }
-        Alphabet<ParameterizedSymbol> alphabet = new ListAlphabet<>(tmpList);
-        return alphabet;
-    }
-
 }

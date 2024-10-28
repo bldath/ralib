@@ -400,7 +400,7 @@ public class MyTestFile extends RaLibTestSuite {
         Constants consts = new Constants();
         SimulatorSUL dwSUL = new SimulatorSUL(sul, teachers, consts);
         MySUL msu = new MySUL(teachers, dwSUL);
-        MyEquivalenceOracle mO = new MyEquivalenceOracle(sul, alphabet, teachers, msu);
+        MyEquivalenceOracle mO = new MyEquivalenceOracle(alphabet, msu);
         Collection<PSymbolInstance> clctn = new ArrayList<>();
         PSymbolInstance psi_put = new PSymbolInstance(I_PUT, new DataValue(T_VAL, 0));
         PSymbolInstance psi_get = new PSymbolInstance(I_GET, new DataValue(T_KEY, 0));

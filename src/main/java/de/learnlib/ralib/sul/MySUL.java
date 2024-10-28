@@ -74,4 +74,8 @@ public class MySUL implements SUL<ParameterizedSymbol, ParameterizedSymbol> {
         }
     return new  ArrayList<>(set);
     }
+
+    public Map<DataType, Theory> getTeachers() {
+        return this.teach;
+    }
 }
