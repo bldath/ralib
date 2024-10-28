@@ -96,6 +96,10 @@ public abstract class AbstractToolWithRandomWalk implements RaLibTool {
     = new ConfigurationOption.BooleanOption("cache.tests",
             "Cache test queries executed during CE analysis", false, true);
 
+    protected static final ConfigurationOption.BooleanOption OPTION_FSM_ABSTRACTION
+    = new ConfigurationOption.BooleanOption("use.abstraction.fsm",
+    		"Use FSM abstraction during equivalence testing", false, true);
+
     protected static final ConfigurationOption.BooleanOption OPTION_RWALK_DRAW
             = new ConfigurationOption.BooleanOption("rwalk.draw.uniform",
                     "Draw next input uniformly", null, false);

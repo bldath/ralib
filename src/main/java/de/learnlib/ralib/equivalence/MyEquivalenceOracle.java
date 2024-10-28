@@ -47,6 +47,10 @@ public class MyEquivalenceOracle implements IOEquivalenceOracle {
         this.mySUL = mySUL;
     }
 
+    public void setHypothesis(MutableRegisterAutomaton ra) {
+    	this.ra = ra;
+    }
+
     public PSymbolInstance PsToPsi(ParameterizedSymbol ps) {
         DataValue[] vals = new DataValue[ps.getArity()];
         SymbolicDataValueGenerator.ParameterGenerator pgen = new SymbolicDataValueGenerator.ParameterGenerator();

@@ -51,6 +51,7 @@ import de.learnlib.ralib.oracles.mto.MultiTheorySDTLogicOracle;
 import de.learnlib.ralib.oracles.mto.MultiTheoryTreeOracle;
 import de.learnlib.ralib.sul.CachingSUL;
 import de.learnlib.ralib.sul.DataWordSUL;
+import de.learnlib.ralib.sul.MySUL;
 import de.learnlib.ralib.sul.SULOracle;
 import de.learnlib.ralib.sul.SimulatorSUL;
 import de.learnlib.ralib.theory.Theory;
@@ -62,6 +63,7 @@ import de.learnlib.ralib.words.OutputSymbol;
 import de.learnlib.ralib.words.PSymbolInstance;
 import de.learnlib.ralib.words.ParameterizedSymbol;
 import de.learnlib.util.statistic.SimpleProfiler;
+import net.automatalib.alphabet.ArrayAlphabet;
 
 /**
  *
@@ -91,6 +93,7 @@ public class IOSimulator extends AbstractToolWithRandomWalk {
         OPTION_USE_RWALK,
         OPTION_MAX_ROUNDS,
         OPTION_TIMEOUT,
+        OPTION_FSM_ABSTRACTION,
         OPTION_RWALK_FRESH_PROB,
         OPTION_RWALK_RESET_PROB,
         OPTION_RWALK_MAX_DEPTH,
@@ -105,7 +108,8 @@ public class IOSimulator extends AbstractToolWithRandomWalk {
 
     private DataWordSUL sulTest;
 
-    private IORandomWalk randomWalk = null;
+    private IOEquivalenceOracle randomWalk = null;
+    private MyEquivalenceOracle abstractionOracle = null;
 
     private IOEquivalenceTest eqTest;
 
@@ -118,6 +122,8 @@ public class IOSimulator extends AbstractToolWithRandomWalk {
     private IOCounterExamplePrefixFinder ceOptPref;
 
     private boolean useEqTest;
+
+    private boolean useFsmAbstraction;
 
 //    private long resets = 0;
 //    private long inputs = 0;
@@ -235,6 +241,7 @@ public class IOSimulator extends AbstractToolWithRandomWalk {
 
         this.useEqTest = OPTION_USE_EQTEST.parse(config);
 
+        useFsmAbstraction = OPTION_FSM_ABSTRACTION.parse(config);
         if (findCounterexamples) {
 
             boolean drawUniformly = OPTION_RWALK_DRAW.parse(config);
@@ -245,7 +252,7 @@ public class IOSimulator extends AbstractToolWithRandomWalk {
             boolean resetRuns = OPTION_RWALK_RESET.parse(config);
             boolean seedTransitions = OPTION_RWALK_SEED_TRANSITIONS.parse(config);
 
-            this.randomWalk = new IORandomWalk(random,
+            IORandomWalk ioRandomWalk = new IORandomWalk(random,
                     sulTest,
                     drawUniformly, // do not draw symbols uniformly
                     resetProbabilty, // reset probability
@@ -258,6 +265,16 @@ public class IOSimulator extends AbstractToolWithRandomWalk {
                     teachers,
                     inputSymbols);
 
+            if (useFsmAbstraction) {
+            	MySUL abstractionSUL = new MySUL(teachers, sulTest);
+            	abstractionOracle = new MyEquivalenceOracle(null,
+            			new ArrayAlphabet<>(inputSymbols),
+            			teachers,
+            			abstractionSUL);
+            	randomWalk = new MySwitchEqOracles(ioRandomWalk, abstractionOracle);
+            } else {
+            	randomWalk = ioRandomWalk;
+            }
         }
 
         this.ceOptLoops = new IOCounterexampleLoopRemover(back);
@@ -331,6 +348,9 @@ public class IOSimulator extends AbstractToolWithRandomWalk {
 
                 DefaultQuery<PSymbolInstance, Boolean> ce2 = null;
 
+                if (useFsmAbstraction) {
+                	abstractionOracle.setHypothesis(hyp);
+                }
                 ce2 = (findCounterexamples ? this.randomWalk.findCounterExample(hyp, new ArrayList<>()) : ce);
 
                 SimpleProfiler.stop(__SEARCH__);
