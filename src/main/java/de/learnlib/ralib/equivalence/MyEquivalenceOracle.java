@@ -134,7 +134,7 @@ public class MyEquivalenceOracle implements IOEquivalenceOracle {
                 OutputSymbol pso = (OutputSymbol) oWIt.next();
                 PSymbolInstance psio = PsToPsi(pso);
             }
-            DefaultQuery<PSymbolInstance, Boolean> qRAo = new DefaultQuery<>(this.counterexample, b);
+            DefaultQuery<PSymbolInstance, Boolean> qRAo = new DefaultQuery<>(this.counterexample, !ra.accepts(counterexample));
             return qRAo;
         }
     }

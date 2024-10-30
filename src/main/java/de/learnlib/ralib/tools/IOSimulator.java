@@ -267,9 +267,8 @@ public class IOSimulator extends AbstractToolWithRandomWalk {
 
             if (useFsmAbstraction) {
             	MySUL abstractionSUL = new MySUL(teachers, sulTest);
-            	abstractionOracle = new MyEquivalenceOracle(null,
+            	abstractionOracle = new MyEquivalenceOracle(
             			new ArrayAlphabet<>(inputSymbols),
-            			teachers,
             			abstractionSUL);
             	randomWalk = new MySwitchEqOracles(ioRandomWalk, abstractionOracle);
             } else {
