@@ -145,7 +145,7 @@ public class MyRAtoMealyTransformer {
     private Boolean readGuards(GuardExpression g, Boolean negate) {
         Boolean res = true;
         if (g instanceof TrueGuardExpression) {
-            // System.out.println("TRUE");
+            System.out.println("TRUE");
             if (negate) {
                 res = false;
             } else {
@@ -156,7 +156,7 @@ public class MyRAtoMealyTransformer {
             Relation rTmp = tmp.getRelation();
             switch(rTmp) {
                 case NOT_EQUALS:
-                    // System.out.println("CASE NOT EQUALS");
+                    System.out.println("CASE NOT EQUALS");
                     if (negate) {
                         res = false;
                     } else {
@@ -164,7 +164,7 @@ public class MyRAtoMealyTransformer {
                     }
                     break;
                 case EQUALS:
-                    // System.out.println("CASE EQUALS");
+                    System.out.println("CASE EQUALS");
                     if (negate) {
                         res = true;
                     } else {
@@ -172,15 +172,15 @@ public class MyRAtoMealyTransformer {
                     }
                     break;
                 default:
-                    // System.out.println("CASE OTHER ATOMICGUARDEXPRESSION");
+                    System.out.println("CASE OTHER ATOMICGUARDEXPRESSION");
                     res = false;
                     break;
             }
-        } else if (g instanceof Conjunction)  { // It is always Conjunction first
+        } else if (g instanceof Conjunction)  { // In some RA it is always Conjunction first
             Conjunction tmp = (Conjunction) g;
             GuardExpression[] conjuncts = tmp.getConjuncts();
             for (GuardExpression c: conjuncts) {
-                // System.out.println("CONJUNCT");
+                System.out.println("CONJUNCT");
                 Boolean tmpRes = readGuards(c, negate);
                 if (tmpRes.equals(false)) {
                     res = false;
@@ -190,14 +190,14 @@ public class MyRAtoMealyTransformer {
             Disjunction tmp = (Disjunction) g;
             GuardExpression[] disjuncts = tmp.getDisjuncts();
             for (GuardExpression d: disjuncts) {
-                // System.out.println("DISJUNCT");
+                System.out.println("DISJUNCT");
                 Boolean tmpRes = readGuards(d, negate);
                 if (tmpRes.equals(false)) {
                     res = false;
                 }
             }
         } else if (g instanceof Negation) {
-            // System.out.println("NEGATION");
+            System.out.println("NEGATION");
             Negation tmp = (Negation) g;
             GuardExpression negated = tmp.getNegated();
             negate = !negate;

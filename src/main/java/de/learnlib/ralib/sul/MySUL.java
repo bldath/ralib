@@ -20,7 +20,8 @@ import net.automatalib.word.Word;
 
 public class MySUL implements SUL<ParameterizedSymbol, ParameterizedSymbol> {
     private final DataWordSUL dwSUL;
-    private Word<PSymbolInstance> pref = null;
+    private Word<PSymbolInstance> inputPref = null;
+    private Word<PSymbolInstance> outputPref = null;
     private final Map<DataType, Theory> teach;
 
     public MySUL(Map<DataType, Theory> teachers,
@@ -29,9 +30,18 @@ public class MySUL implements SUL<ParameterizedSymbol, ParameterizedSymbol> {
         this.dwSUL = dwSUL;
     }
 
+    public Word<PSymbolInstance> getInputPrefix() {
+        return this.inputPref;
+    }
+
+    public Word<PSymbolInstance> getOutputPrefix() {
+        return this.outputPref;
+    }
+
     public void
      pre() {
-        pref = Word.epsilon();
+        inputPref = Word.epsilon();
+        outputPref = Word.epsilon();
         dwSUL.pre();
     }
 
@@ -53,20 +63,22 @@ public class MySUL implements SUL<ParameterizedSymbol, ParameterizedSymbol> {
             i++;
         }
         PSymbolInstance psi = new PSymbolInstance(ps, vals);
-        pref = pref.append(psi);
+        inputPref = inputPref.append(psi);
         return psi;
     }
 
     public ParameterizedSymbol step(ParameterizedSymbol pi) throws SULException {
+        System.out.println("HEEEEEEEEEEEEEEEEEEEEEEEY");
         PSymbolInstance psi = psToPsi(pi);
         PSymbolInstance pso = dwSUL.step(psi);
+        outputPref = outputPref.append(pso);
         ParameterizedSymbol po = pso.getBaseSymbol();
         return po;
     }
 
     private List<DataValue> computeOld(DataType t, ParValuation pval) {
     java.util.Set<DataValue> set = new java.util.LinkedHashSet<>();
-    set.addAll(DataWords.valSet(pref, t));
+    set.addAll(DataWords.valSet(inputPref, t));
     for (DataValue d : pval.values()){
         if (d.getType().equals(t)) {
             set.add(d);

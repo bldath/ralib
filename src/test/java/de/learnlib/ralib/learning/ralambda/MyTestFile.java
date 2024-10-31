@@ -424,7 +424,7 @@ public class MyTestFile extends RaLibTestSuite {
         clctn.add(psi_put);
         clctn.add(psi_get);
         //CRASHES WHEN FINDING MEALY COUNTER EXAMPLE, EXCEPT ONCE IN A WHILE, BUT RA EXAMPLE IS INCOMPLETE
-        //DefaultQuery<PSymbolInstance, Boolean> res = mO.findCounterExample(sul, clctn);
+        DefaultQuery<PSymbolInstance, Boolean> res = mO.findCounterExample(sul, clctn);
     }
 
     @Test
