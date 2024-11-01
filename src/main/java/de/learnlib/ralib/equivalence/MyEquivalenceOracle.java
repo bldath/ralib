@@ -105,7 +105,7 @@ public class MyEquivalenceOracle implements IOEquivalenceOracle {
                 this.mealyMachine = raToM.getMealy();
                 System.out.println("Made mealy");
                 MembershipOracle mSul = new SULOracle(mySUL);
-                RandomWpMethodEQOracle rwpO = new RandomWpMethodEQOracle<>(mSul, 0, 2, 100000); //FIX INTS
+                RandomWpMethodEQOracle rwpO = new RandomWpMethodEQOracle<>(mSul, 0, 2, 10000); //FIX INTS
                 System.out.println("Made RWPEQOracle");
                 System.out.println("Inputalphabet is: " + inputAlph.toString());
                 DefaultQuery<ParameterizedSymbol, Object> qM = rwpO.findCounterExample(mealyMachine, inputAlph);
