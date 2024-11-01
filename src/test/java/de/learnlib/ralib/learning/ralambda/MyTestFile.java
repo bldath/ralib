@@ -593,7 +593,7 @@ public class MyTestFile extends RaLibTestSuite {
         SimulatorSUL dwSUL = new SimulatorSUL(model, teachers, consts);
         MySUL msu = new MySUL(teachers, dwSUL);
         MyEquivalenceOracle mO = new MyEquivalenceOracle(alphabet, msu);
-        //
+        //DOES NOT TERMINATE
         DefaultQuery<PSymbolInstance, Boolean> res = mO.findCounterExample(model, null);
     }
 
