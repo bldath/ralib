@@ -64,7 +64,7 @@ public class MySUL implements SUL<ParameterizedSymbol, ParameterizedSymbol> {
         }
         PSymbolInstance psi = new PSymbolInstance(ps, vals);
         inputPref = inputPref.append(psi);
-        System.out.println("Outputprefix: " + outputPref.toString());
+        //System.out.println("Outputprefix: " + outputPref.toString());
         System.out.println("Inputprefix: " + inputPref.toString());
         return psi;
     }
@@ -72,7 +72,7 @@ public class MySUL implements SUL<ParameterizedSymbol, ParameterizedSymbol> {
     public ParameterizedSymbol step(ParameterizedSymbol pi) throws SULException {
         PSymbolInstance psi = psToPsi(pi);
         PSymbolInstance pso = dwSUL.step(psi);
-        System.out.println("PSI " + psi.toString() + " PSO " + pso.toString());
+        //System.out.println("PSI " + psi.toString() + " PSO " + pso.toString());
         outputPref = outputPref.append(pso);
         ParameterizedSymbol po = pso.getBaseSymbol();
         return po;

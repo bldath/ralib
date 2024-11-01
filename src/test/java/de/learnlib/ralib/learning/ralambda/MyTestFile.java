@@ -424,7 +424,7 @@ public class MyTestFile extends RaLibTestSuite {
         clctn.add(psi_put);
         clctn.add(psi_get);
         //CRASHES WHEN FINDING MEALY COUNTER EXAMPLE, EXCEPT ONCE IN A WHILE, BUT RA EXAMPLE IS INCOMPLETE
-        DefaultQuery<PSymbolInstance, Boolean> res = mO.findCounterExample(sul, clctn);
+        //DefaultQuery<PSymbolInstance, Boolean> res = mO.findCounterExample(sul, clctn);
     }
 
     @Test
@@ -594,9 +594,39 @@ public class MyTestFile extends RaLibTestSuite {
         MySUL msu = new MySUL(teachers, dwSUL);
         MyEquivalenceOracle mO = new MyEquivalenceOracle(alphabet, msu);
         //DOES NOT TERMINATE
-        DefaultQuery<PSymbolInstance, Boolean> res = mO.findCounterExample(model, null);
+        //DefaultQuery<PSymbolInstance, Boolean> res = mO.findCounterExample(model, null);
     }
 
+    @Test
+    public void myTest5c() {
+
+        RegisterAutomatonImporter loader = TestUtil.getLoader(
+                "/de/learnlib/ralib/automata/xml/sip.xml");
+        RegisterAutomaton model = loader.getRegisterAutomaton();
+        System.out.println("RA IS: " + model.toString());
+        Alphabet<InputSymbol> inputs = loader.getInputs();
+
+        List<ParameterizedSymbol> tmp = new ArrayList<>();
+        for (ParameterizedSymbol p : inputs) {
+            tmp.add(p);
+        }
+
+        Alphabet<ParameterizedSymbol> alphabet =  new ListAlphabet<>(tmp);
+        final Constants consts = loader.getConstants();
+        final Map<DataType, Theory> teachers = new LinkedHashMap<>();
+        loader.getDataTypes().stream().forEach((t) -> {
+            IntegerEqualityTheory theory = new IntegerEqualityTheory(t);
+            theory.setUseSuffixOpt(false);
+            teachers.put(t, theory);
+        });
+
+
+        SimulatorSUL dwSUL = new SimulatorSUL(model, teachers, consts);
+        MySUL msu = new MySUL(teachers, dwSUL);
+        MyEquivalenceOracle mO = new MyEquivalenceOracle(alphabet, msu);
+        //
+        DefaultQuery<PSymbolInstance, Boolean> res = mO.findCounterExample(model, null);
+    }
 
 
     @Test
