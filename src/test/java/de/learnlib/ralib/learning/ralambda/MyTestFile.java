@@ -338,38 +338,6 @@ public class MyTestFile extends RaLibTestSuite {
         FastMealy<ParameterizedSymbol, ParameterizedSymbol> actMealy = raToM.getMealy();
         //System.out.println("RA IS: " + sul.toString());
 
-//         RA IS: l0 (+) (initial):
-//   (l0 (+), ?put[T_val], TRUE, [r3:=p1,], l3 (+))
-
-// l1 (+):
-//   (l1 (+), ?put[T_val], TRUE, [r1:=r1,r3:=r3,r4:=p1,], l4 (+))
-//   (l1 (+), ?get[T_key], (r1==p1), [r1:=r1,r3:=r3,], l5 (+))
-//   (l1 (+), ?get[T_key], (!(r1==p1)), [r1:=r1,r3:=r3,], l6 (+))
-
-// l2 (+):
-//   (l2 (+), ?get[T_key], (r1==p1), [r1:=r1,r3:=r3,r2:=r2,r4:=r4,], l7 (+))
-//   (l2 (+), ?get[T_key], (r2==p1), [r1:=r1,r3:=r3,r2:=r2,r4:=r4,], l8 (+))
-
-// l3 (+):
-//   (l3 (+), !o_p[T_key], TRUE, F:[p1], M:[], [r3:=r3,r1:=p1,], l1 (+))
-
-// l4 (+):
-//   (l4 (+), !o_p[T_key], TRUE, F:[p1], M:[], [r1:=r1,r3:=r3,r4:=r4,r2:=p1,], l2 (+))
-
-// l5 (+):
-//   (l5 (+), !o_g[T_val], TRUE, F:[], M:[p1>r3,], [r1:=r1,r3:=r3,], l1 (+))
-
-// l6 (+):
-//   (l6 (+), !null[], TRUE, F:[], M:[], [r1:=r1,r3:=r3,], l1 (+))
-
-// l7 (+):
-//   (l7 (+), !o_g[T_val], TRUE, F:[], M:[p1>r3,], [r1:=r1,r3:=r3,r2:=r2,r4:=r4,], l2 (+))
-
-// l8 (+):
-//   (l8 (+), !o_g[T_val], TRUE, F:[], M:[p1>r4,], [r1:=r1,r3:=r3,r2:=r2,r4:=r4,], l2 (+))
-
-// Init:[]
-
         FastMealy<ParameterizedSymbol, ParameterizedSymbol> expMealy = new FastMealy<>(alphabet);
         FastMealyState<ParameterizedSymbol> exp0 = expMealy.addInitialState();
         FastMealyState<ParameterizedSymbol> exp1 = expMealy.addState();
@@ -384,19 +352,6 @@ public class MyTestFile extends RaLibTestSuite {
         expMealy.addTransition(exp0, I_PUT, exp1, O_PUT);
         expMealy.addTransition(exp1, I_PUT, exp2, O_PUT);
         expMealy.addTransition(exp1, I_GET, exp1, O_NULL);
-
-
-
-        // RegisterAutomatonImporter loader = TestUtil.getLoader(
-        //         "/de/learnlib/ralib/automata/xml/sip.xml");
-
-        // RegisterAutomaton model = loader.getRegisterAutomaton();
-
-        // ParameterizedSymbol[] inputs = loader.getInputs().toArray(
-        //         new ParameterizedSymbol[]{});
-
-
-
 
         // When using old version of depth first search, get 6 transitions instead of 3
 
@@ -443,160 +398,18 @@ public class MyTestFile extends RaLibTestSuite {
 
     @Test
     public void myTest5b() {
-
         RegisterAutomatonImporter loader = TestUtil.getLoader(
                 "/de/learnlib/ralib/automata/xml/sip.xml");
-
         RegisterAutomaton model = loader.getRegisterAutomaton();
-
         //System.out.println("RA IS: " + model.toString());
 
-// RA IS: l0 (+):
-//   (l0 (+), ?Inil[], TRUE, [], l8 (+))
-//   (l0 (+), ?IACK[int], TRUE, [], l1 (+))
-//   (l0 (+), ?IPRACK[int], TRUE, [], l1 (+))
-//   (l0 (+), ?IINVITE[int], (p1==r2), [], l13 (+))
-//   (l0 (+), ?IINVITE[int], (p1!=r2), [r1:=p1,], l11 (+))
-
-// l1 (+):
-//   (l1 (+), !Otimeout[], TRUE, F:[], M:[], [], l0 (+))
-
-// l2 (+):
-//   (l2 (+), !O486[int], TRUE, F:[], M:[p1>r2,], [], l0 (+))
-
-// l3 (+):
-//   (l3 (+), !O180[int], TRUE, F:[], M:[p1>r2,], [], l0 (+))
-
-// l4 (+):
-//   (l4 (+), !Otimeout[], TRUE, F:[], M:[], [], l7 (+))
-
-// l5 (+):
-//   (l5 (+), !O481[int], TRUE, F:[], M:[p1>r1,], [], l0 (+))
-
-// l6 (+):
-//   (l6 (+), !Otimeout[], TRUE, F:[], M:[], [], l20 (+))
-
-// l7 (+):
-//   (l7 (+), ?Inil[], TRUE, [], l4 (+))
-//   (l7 (+), ?IINVITE[int], TRUE, [], l4 (+))
-//   (l7 (+), ?IPRACK[int], TRUE, [], l4 (+))
-//   (l7 (+), ?IACK[int], TRUE, [], l4 (+))
-
-// l8 (+):
-//   (l8 (+), !Otimeout[], TRUE, F:[], M:[], [], l0 (+))
-
-// l9 (+):
-//   (l9 (+), !Otimeout[], TRUE, F:[], M:[], [], l23 (+))
-
-// l10 (+):
-//   (l10 (+), ?Inil[], TRUE, [], l5 (+))
-//   (l10 (+), ?IACK[int], TRUE, [], l1 (+))
-//   (l10 (+), ?IPRACK[int], TRUE, [], l1 (+))
-//   (l10 (+), ?IINVITE[int], (p1==r2), [], l13 (+))
-//   (l10 (+), ?IINVITE[int], (p1!=r2), [r1:=p1,], l11 (+))
-
-// l11 (+):
-//   (l11 (+), !O100[int], TRUE, F:[], M:[p1>r1,], [], l10 (+))
-
-// l12 (+):
-//   (l12 (+), ?Inil[], TRUE, [], l2 (+))
-//   (l12 (+), ?IACK[int], TRUE, [], l1 (+))
-//   (l12 (+), ?IPRACK[int], TRUE, [], l1 (+))
-//   (l12 (+), ?IINVITE[int], (p1==r2), [], l13 (+))
-//   (l12 (+), ?IINVITE[int], (p1!=r2), [r1:=p1,], l11 (+))
-
-// l13 (+):
-//   (l13 (+), !O100[int], TRUE, F:[], M:[p1>r2,], [], l12 (+))
-
-// l14 (+):
-//   (l14 (+), !O486[int], TRUE, F:[], M:[p1>r1,], [], l23 (+))
-
-// l15 (+):
-//   (l15 (+), !O486[int], TRUE, F:[], M:[p1>r2,], [], l23 (+))
-
-// l16 (+):
-//   (l16 (+), ?IPRACK[int], (p1!=r2), [r1:=p1,], l22 (+))
-//   (l16 (+), ?IPRACK[int], (p1==r2), [], l29 (+))
-//   (l16 (+), ?Inil[], TRUE, [], l14 (+))
-//   (l16 (+), ?IACK[int], TRUE, [], l19 (+))
-//   (l16 (+), ?IINVITE[int], (p1==r2), [], l27 (+))
-//   (l16 (+), ?IINVITE[int], (p1!=r2), [r1:=p1,], l17 (+))
-
-// l17 (+):
-//   (l17 (+), !O100[int], TRUE, F:[], M:[p1>r1,], [], l16 (+))
-
-// l18 (+):
-//   (l18 (+), !O183[int], TRUE, F:[], M:[p1>r2,], [], l23 (+))
-
-// l19 (+):
-//   (l19 (+), !Otimeout[], TRUE, F:[], M:[], [], l23 (+))
-
-// l20 (+) (initial):
-//   (l20 (+), ?Inil[], TRUE, [], l6 (+))
-//   (l20 (+), ?IACK[int], TRUE, [], l4 (+))
-//   (l20 (+), ?IPRACK[int], TRUE, [], l4 (+))
-//   (l20 (+), ?IINVITE[int], TRUE, [r2:=p1,], l21 (+))
-
-// l21 (+):
-//   (l21 (+), !O100[int], TRUE, F:[], M:[p1>r2,], [], l28 (+))
-
-// l22 (+):
-//   (l22 (+), !O481[int], TRUE, F:[], M:[p1>r1,], [], l23 (+))
-
-// l23 (+):
-//   (l23 (+), ?Inil[], TRUE, [], l9 (+))
-//   (l23 (+), ?IINVITE[int], (p1==r2), [], l27 (+))
-//   (l23 (+), ?IINVITE[int], (p1!=r2), [r1:=p1,], l17 (+))
-//   (l23 (+), ?IPRACK[int], (p1==r2), [], l29 (+))
-//   (l23 (+), ?IPRACK[int], (p1!=r2), [r1:=p1,], l22 (+))
-//   (l23 (+), ?IACK[int], TRUE, [], l19 (+))
-
-// l24 (+):
-//   (l24 (+), ?IPRACK[int], (p1==r2), [], l29 (+))
-//   (l24 (+), ?IPRACK[int], (p1!=r2), [r1:=p1,], l22 (+))
-//   (l24 (+), ?IINVITE[int], (p1!=r2), [r1:=p1,], l17 (+))
-//   (l24 (+), ?IINVITE[int], (p1==r2), [], l25 (+))
-//   (l24 (+), ?Inil[], TRUE, [], l15 (+))
-//   (l24 (+), ?IACK[int], TRUE, [], l19 (+))
-
-// l25 (+):
-//   (l25 (+), !O100[int], TRUE, F:[], M:[p1>r2,], [], l24 (+))
-
-// l26 (+):
-//   (l26 (+), ?Inil[], TRUE, [], l3 (+))
-//   (l26 (+), ?IACK[int], TRUE, [], l1 (+))
-//   (l26 (+), ?IPRACK[int], TRUE, [], l1 (+))
-//   (l26 (+), ?IINVITE[int], (p1!=r2), [r1:=p1,], l11 (+))
-//   (l26 (+), ?IINVITE[int], (p1==r2), [], l13 (+))
-
-// l27 (+):
-//   (l27 (+), !O100[int], TRUE, F:[], M:[p1>r2,], [], l24 (+))
-
-// l28 (+):
-//   (l28 (+), ?IINVITE[int], (p1!=r2), [r1:=p1,], l17 (+))
-//   (l28 (+), ?IINVITE[int], (p1==r2), [], l27 (+))
-//   (l28 (+), ?Inil[], TRUE, [], l18 (+))
-//   (l28 (+), ?IACK[int], TRUE, [], l19 (+))
-//   (l28 (+), ?IPRACK[int], (p1!=r2), [r1:=p1,], l22 (+))
-//   (l28 (+), ?IPRACK[int], (p1==r2), [], l29 (+))
-
-// l29 (+):
-//   (l29 (+), !O200[int], TRUE, F:[], M:[p1>r2,], [], l26 (+))
-
-// Init:[r1>0[int],r2>0[int],]
-
         Alphabet<InputSymbol> inputs = loader.getInputs();
-
         List<ParameterizedSymbol> tmp = new ArrayList<>();
-
         for (ParameterizedSymbol p : inputs) {
             tmp.add(p);
         }
-
         Alphabet<ParameterizedSymbol> alphabet =  new ListAlphabet<>(tmp);
-
         final Constants consts = loader.getConstants();
-
         final Map<DataType, Theory> teachers = new LinkedHashMap<>();
         loader.getDataTypes().stream().forEach((t) -> {
             IntegerEqualityTheory theory = new IntegerEqualityTheory(t);
@@ -607,13 +420,11 @@ public class MyTestFile extends RaLibTestSuite {
         SimulatorSUL dwSUL = new SimulatorSUL(model, teachers, consts);
         MySUL msu = new MySUL(teachers, dwSUL);
         MyEquivalenceOracle mO = new MyEquivalenceOracle(alphabet, msu);
-        //DOES NOT TERMINATE
         //DefaultQuery<PSymbolInstance, Boolean> res = mO.findCounterExample(model, null);
     }
 
     @Test
     public void myTest5c() {
-
         RegisterAutomatonImporter loader = TestUtil.getLoader(
                 "/de/learnlib/ralib/automata/xml/sip.xml");
         RegisterAutomaton model = loader.getRegisterAutomaton();
@@ -624,7 +435,6 @@ public class MyTestFile extends RaLibTestSuite {
         for (ParameterizedSymbol p : inputs) {
             tmp.add(p);
         }
-
         Alphabet<ParameterizedSymbol> alphabet =  new ListAlphabet<>(tmp);
         final Constants consts = loader.getConstants();
         final Map<DataType, Theory> teachers = new LinkedHashMap<>();
@@ -633,7 +443,6 @@ public class MyTestFile extends RaLibTestSuite {
             theory.setUseSuffixOpt(false);
             teachers.put(t, theory);
         });
-
 
         SimulatorSUL dwSUL = new SimulatorSUL(model, teachers, consts);
         MySUL msu = new MySUL(teachers, dwSUL);
@@ -700,16 +509,10 @@ public class MyTestFile extends RaLibTestSuite {
         }
         Alphabet<ParameterizedSymbol> alphabet =  new ListAlphabet<>(tmp);
 
-        // loader.getDataTypes().stream().forEach((t) -> {
-        //     IntegerEqualityTheory theory = new IntegerEqualityTheory(t);
-        //     theory.setUseSuffixOpt(false);
-        //     teachers.put(t, theory);
-        // });
-
         SimulatorSUL dwSUL = new SimulatorSUL(model, teachers, consts);
         MySUL msu = new MySUL(teachers, dwSUL);
         MyEquivalenceOracle mO = new MyEquivalenceOracle(alphabet, msu);
-        //WORKS WHEN BOUNDED EXCEPT OCCASIONAL STATE IS NULL CRASH IN MEALY ORACLE DUE TO INCOMPLETE HYP
+        //WORKS WHEN BOUNDED BUT SOMETIMES RETURNS NON-COUNTEREXAMPLE AND SOMETIMES CRASHES
         DefaultQuery<PSymbolInstance, Boolean> res = mO.findCounterExample(hyp, null);
 
         if (res!=null) {
