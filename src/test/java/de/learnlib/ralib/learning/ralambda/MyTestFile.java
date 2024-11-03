@@ -712,31 +712,35 @@ public class MyTestFile extends RaLibTestSuite {
         //WORKS WHEN BOUNDED EXCEPT OCCASIONAL STATE IS NULL CRASH IN MEALY ORACLE DUE TO INCOMPLETE HYP
         DefaultQuery<PSymbolInstance, Boolean> res = mO.findCounterExample(hyp, null);
 
-        //     // DefaultQuery<PSymbolInstance, Boolean> ce =
-        //     //         ioEquiv.findCounterExample(hyp, null);
+        if (res!=null) {
+            Assert.assertNotEquals(model.accepts(res.getInput()), hyp.accepts(res.getInput()));
+            ralambda.addCounterexample(res);
+            ralambda.learn();
+        } else {
+            System.out.println("CE IS NULL");
+        }
 
-        //     DefaultQuery<PSymbolInstance, Boolean> ce =
-        //              ioEquiv.findCounterExample(hyp, null);
+        hyp = ralambda.getHypothesis();
+        System.out.println("HYP2 IS: " + hyp.toString());
+        res = mO.findCounterExample(hyp, null);
+        if (res!=null) {
+            Assert.assertNotEquals(model.accepts(res.getInput()), hyp.accepts(res.getInput()));
+            ralambda.addCounterexample(res);
+            ralambda.learn();
+        } else {
+            System.out.println("CE IS NULL");
+        }
 
-        //     if (ce == null) {
-        //         break;
-        //     }
-
-        //     ce = loops.optimizeCE(ce.getInput(), hyp);
-        //     ce = asrep.optimizeCE(ce.getInput(), hyp);
-        //     ce = pref.optimizeCE(ce.getInput(), hyp);
-
-        //     Assert.assertTrue(model.accepts(ce.getInput()));
-        //     Assert.assertTrue(!hyp.accepts(ce.getInput()));
-
-        //     ralambda.addCounterexample(ce);
-        // //}
-
-        // RegisterAutomaton hyp = ralambda.getHypothesis();
-        // logger.log(Level.FINE, "FINAL HYP: {0}", hyp);
-        // DefaultQuery<PSymbolInstance, Boolean> ce = ioEquiv.findCounterExample(hyp, null);
-
-        // Assert.assertNull(ce);
+        hyp = ralambda.getHypothesis();
+        System.out.println("HYP3 IS: " + hyp.toString());
+        res = mO.findCounterExample(hyp, null);
+        if (res!=null) {
+            Assert.assertNotEquals(model.accepts(res.getInput()), hyp.accepts(res.getInput()));
+            ralambda.addCounterexample(res);
+            ralambda.learn();
+        } else {
+            System.out.println("CE IS NULL");
+        }
     }
 
     @Test
