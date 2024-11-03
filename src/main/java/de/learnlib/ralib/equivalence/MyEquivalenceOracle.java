@@ -70,6 +70,7 @@ public class MyEquivalenceOracle implements IOEquivalenceOracle {
     }
 
     private DefaultQuery<PSymbolInstance, Boolean> formatCounterExample() {
+        counterexample = Word.epsilon();
         Boolean b = false;
         this.inputPrefix = mySUL.getInputPrefix();
         this.outputPrefix = mySUL.getOutputPrefix();

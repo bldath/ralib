@@ -525,6 +525,7 @@ public class MyTestFile extends RaLibTestSuite {
 
         hyp = ralambda.getHypothesis();
         System.out.println("HYP2 IS: " + hyp.toString());
+        res = null;
         res = mO.findCounterExample(hyp, null);
         if (res!=null) {
             Assert.assertNotEquals(model.accepts(res.getInput()), hyp.accepts(res.getInput()));
@@ -536,6 +537,7 @@ public class MyTestFile extends RaLibTestSuite {
 
         hyp = ralambda.getHypothesis();
         System.out.println("HYP3 IS: " + hyp.toString());
+        res = null;
         res = mO.findCounterExample(hyp, null);
         if (res!=null) {
             Assert.assertNotEquals(model.accepts(res.getInput()), hyp.accepts(res.getInput()));
