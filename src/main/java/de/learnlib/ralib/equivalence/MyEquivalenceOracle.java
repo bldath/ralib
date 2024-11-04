@@ -81,10 +81,7 @@ public class MyEquivalenceOracle implements IOEquivalenceOracle {
         }
         PSymbolInstance last = oWList.get(oWList.size() - 1);
         if (last.getBaseSymbol().getName().equals("+[]") || last.getBaseSymbol().getName().equals("-[]")) {
-            if (last.getBaseSymbol().getName().equals("+[]")) {
-                b = true;
-            }
-            DefaultQuery<PSymbolInstance, Boolean> qRA = new DefaultQuery<>(this.inputPrefix, b);
+            DefaultQuery<PSymbolInstance, Boolean> qRA = new DefaultQuery<>(this.inputPrefix, !ra.accepts(counterexample));
             return qRA;
         } else {
             Iterator oWIt = oWList.iterator();
