@@ -47,6 +47,35 @@ import net.automatalib.alphabet.Alphabet;
 import net.automatalib.alphabet.ListAlphabet;
 import net.automatalib.word.Word;
 
+//To run with IOSimulator instead:
+//From linux terminal run: 
+//mvn package assembly:single
+//java -ea -jar target/ralib-0.1-SNAPSHOT-jar-with-dependencies.jar iosimulator -f config
+
+
+//In file config:
+// target=src/test/resources/de/learnlib/ralib/automata/xml/sip.xml
+
+// logging.level=WARNING
+// max.time.millis=600000
+// use.eqtest=true
+// use.ceopt=false
+// use.suffixopt=true
+// use.fresh=false
+// use.rwalk=true
+// export.model=true
+// rwalk.prob.fresh=0.8
+// rwalk.prob.reset=0.1
+// rwalk.max.depth=100
+// rwalk.max.runs=10000
+// rwalk.reset.count=false
+// rwalk.draw.uniform=false
+// teachers=int:de.learnlib.ralib.tools.theories.IntegerEqualityTheory
+// use.abstraction.fsm=true
+// learner=slstar
+
+
+
 public class MyNewTestFile extends RaLibTestSuite {
 
   @Test

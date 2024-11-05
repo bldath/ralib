@@ -84,13 +84,13 @@ public class MyRAtoMealyTransformer {
     }
 
     private void depthFirstSearch() {
-        printTransitionsAndStatesByType();
+        //printTransitionsAndStatesByType();
         Collection<Transition> startTrs = this.startLoc.getOut();
-        System.out.println("STARTLOCATION IS: " + startLoc.toString());
+        //System.out.println("STARTLOCATION IS: " + startLoc.toString());
         FastMealy<ParameterizedSymbol, ParameterizedSymbol> mealy = new FastMealy<>(this.alphabet);
         FastMealyState<ParameterizedSymbol> mStartState = mealy.addInitialState();
         lookupStates.put(this.startLoc, mStartState);
-        System.out.println("LOOKUP " + startLoc.toString() + " " + mStartState.toString());
+        //System.out.println("LOOKUP " + startLoc.toString() + " " + mStartState.toString());
         for (Transition t : startTrs) {
             if (keepTransition(t).equals(true)) {
                 ParameterizedSymbol symb = t.getLabel();
@@ -106,18 +106,18 @@ public class MyRAtoMealyTransformer {
                             if (!this.lookupStates.containsKey(destLoc2)) {
                                 FastMealyState<ParameterizedSymbol> mState2 = mealy.addState();
                                 this.lookupStates.put(destLoc2, mState2);
-                                System.out.println("LOOKUP " + destLoc2.toString() + " " + mState2.toString());
+                                //System.out.println("LOOKUP " + destLoc2.toString() + " " + mState2.toString());
                                 mealy.addTransition(this.lookupStates.get(this.startLoc), symb, mState2, os);
-                                System.out.print("FROM_1 " + mealy.getState(this.lookupStates.get(this.startLoc).getId()) + " TO " + mealy.getTransition(this.lookupStates.get(this.startLoc), symb).getSuccessor() + " " + symb.toString() + " WITH OUTPUT " + mealy.getTransition(this.lookupStates.get(this.startLoc), symb).getOutput() + "\n");
+                                //System.out.print("FROM_1 " + mealy.getState(this.lookupStates.get(this.startLoc).getId()) + " TO " + mealy.getTransition(this.lookupStates.get(this.startLoc), symb).getSuccessor() + " " + symb.toString() + " WITH OUTPUT " + mealy.getTransition(this.lookupStates.get(this.startLoc), symb).getOutput() + "\n");
                                 visit(destLoc2, mealy);
                             } else {
                                 mealy.addTransition(this.lookupStates.get(this.startLoc), symb, this.lookupStates.get(destLoc2), os);
-                                System.out.print("FROM_2 " + mealy.getState(this.lookupStates.get(this.startLoc).getId()) + " TO " + mealy.getTransition(this.lookupStates.get(this.startLoc), symb).getSuccessor() + " " + symb.toString() + " WITH OUTPUT " + mealy.getTransition(this.lookupStates.get(this.startLoc), symb).getOutput() + "\n");
+                                //System.out.print("FROM_2 " + mealy.getState(this.lookupStates.get(this.startLoc).getId()) + " TO " + mealy.getTransition(this.lookupStates.get(this.startLoc), symb).getSuccessor() + " " + symb.toString() + " WITH OUTPUT " + mealy.getTransition(this.lookupStates.get(this.startLoc), symb).getOutput() + "\n");
                             }
                         }
                     }
                     if (count > 1) {
-                        throw new IllegalStateException("TOO MANY OUTPUT TRANSITIONS IN LOC " + destLoc.toString());
+                        throw new IllegalStateException("INCORRECT NUMBER OF OUTPUT TRANSITIONS IN LOC " + destLoc.toString());
                     }
                 } else {
                     OutputSymbol output;
@@ -130,11 +130,11 @@ public class MyRAtoMealyTransformer {
                         FastMealyState<ParameterizedSymbol> mState = mealy.addState();
                         this.lookupStates.put(destLoc, mState);
                         mealy.addTransition(this.lookupStates.get(this.startLoc), symb, mState, output);
-                        System.out.print("FROM_A " + mealy.getState(this.lookupStates.get(this.startLoc).getId()) + " TO " + mealy.getTransition(this.lookupStates.get(this.startLoc), symb).getSuccessor() + " " + symb.toString() + " WITH OUTPUT " + mealy.getTransition(this.lookupStates.get(this.startLoc), symb).getOutput() + "\n");
+                        //System.out.print("FROM_A " + mealy.getState(this.lookupStates.get(this.startLoc).getId()) + " TO " + mealy.getTransition(this.lookupStates.get(this.startLoc), symb).getSuccessor() + " " + symb.toString() + " WITH OUTPUT " + mealy.getTransition(this.lookupStates.get(this.startLoc), symb).getOutput() + "\n");
                         visit(destLoc, mealy);
                     } else {
                         mealy.addTransition(this.lookupStates.get(this.startLoc), symb, this.lookupStates.get(destLoc), output);
-                        System.out.print("FROM_B " + mealy.getState(this.lookupStates.get(this.startLoc).getId()) + " TO " + mealy.getTransition(this.lookupStates.get(this.startLoc), symb).getSuccessor() + " " + symb.toString() + " WITH OUTPUT " + mealy.getTransition(this.lookupStates.get(this.startLoc), symb).getOutput() + "\n");
+                        //System.out.print("FROM_B " + mealy.getState(this.lookupStates.get(this.startLoc).getId()) + " TO " + mealy.getTransition(this.lookupStates.get(this.startLoc), symb).getSuccessor() + " " + symb.toString() + " WITH OUTPUT " + mealy.getTransition(this.lookupStates.get(this.startLoc), symb).getOutput() + "\n");
                     }
                 }
             }
@@ -145,7 +145,7 @@ public class MyRAtoMealyTransformer {
     private Boolean readGuards(GuardExpression g, Boolean negate) {
         Boolean res = true;
         if (g instanceof TrueGuardExpression) {
-            System.out.println("TRUE");
+            //System.out.println("TRUE");
             if (negate) {
                 res = false;
             } else {
@@ -156,7 +156,7 @@ public class MyRAtoMealyTransformer {
             Relation rTmp = tmp.getRelation();
             switch(rTmp) {
                 case NOT_EQUALS:
-                    System.out.println("CASE NOT EQUALS");
+                    //System.out.println("CASE NOT EQUALS");
                     if (negate) {
                         res = false;
                     } else {
@@ -164,7 +164,7 @@ public class MyRAtoMealyTransformer {
                     }
                     break;
                 case EQUALS:
-                    System.out.println("CASE EQUALS");
+                    //System.out.println("CASE EQUALS");
                     if (negate) {
                         res = true;
                     } else {
@@ -172,7 +172,7 @@ public class MyRAtoMealyTransformer {
                     }
                     break;
                 default:
-                    System.out.println("CASE OTHER ATOMICGUARDEXPRESSION");
+                    //System.out.println("CASE OTHER ATOMICGUARDEXPRESSION");
                     res = false;
                     break;
             }
@@ -180,7 +180,7 @@ public class MyRAtoMealyTransformer {
             Conjunction tmp = (Conjunction) g;
             GuardExpression[] conjuncts = tmp.getConjuncts();
             for (GuardExpression c: conjuncts) {
-                System.out.println("CONJUNCT");
+                //System.out.println("CONJUNCT");
                 Boolean tmpRes = readGuards(c, negate);
                 if (tmpRes.equals(false)) {
                     res = false;
@@ -190,14 +190,14 @@ public class MyRAtoMealyTransformer {
             Disjunction tmp = (Disjunction) g;
             GuardExpression[] disjuncts = tmp.getDisjuncts();
             for (GuardExpression d: disjuncts) {
-                System.out.println("DISJUNCT");
+                //System.out.println("DISJUNCT");
                 Boolean tmpRes = readGuards(d, negate);
                 if (tmpRes.equals(false)) {
                     res = false;
                 }
             }
         } else if (g instanceof Negation) {
-            System.out.println("NEGATION");
+            //System.out.println("NEGATION");
             Negation tmp = (Negation) g;
             GuardExpression negated = tmp.getNegated();
             negate = !negate;
@@ -240,18 +240,18 @@ public class MyRAtoMealyTransformer {
                                 if (!this.lookupStates.containsKey(destLoc2)) {
                                     FastMealyState<ParameterizedSymbol> mState2 = mealy.addState();
                                     this.lookupStates.put(destLoc2, mState2);
-                                    System.out.println("LOOKUP " + destLoc2.toString() + " " + mState2.toString());
+                                    //System.out.println("LOOKUP " + destLoc2.toString() + " " + mState2.toString());
                                     mealy.addTransition(this.lookupStates.get(sourceLoc), symb, mState2, os);
-                                    System.out.print("FROM_3 " + mealy.getState(this.lookupStates.get(sourceLoc).getId()) + " TO " + mealy.getTransition(this.lookupStates.get(sourceLoc), symb).getSuccessor() + " " + symb.toString() + " WITH OUTPUT " + mealy.getTransition(this.lookupStates.get(sourceLoc), symb).getOutput() + "\n");
+                                    //System.out.print("FROM_3 " + mealy.getState(this.lookupStates.get(sourceLoc).getId()) + " TO " + mealy.getTransition(this.lookupStates.get(sourceLoc), symb).getSuccessor() + " " + symb.toString() + " WITH OUTPUT " + mealy.getTransition(this.lookupStates.get(sourceLoc), symb).getOutput() + "\n");
                                     visit(destLoc2, mealy);
                                 } else {
                                     mealy.addTransition(this.lookupStates.get(sourceLoc), symb, this.lookupStates.get(destLoc2), os);
-                                    System.out.print("FROM_4 " + mealy.getState(this.lookupStates.get(sourceLoc).getId()) + " TO " + mealy.getTransition(this.lookupStates.get(sourceLoc), symb).getSuccessor() + " " + symb.toString() + " WITH OUTPUT " + mealy.getTransition(this.lookupStates.get(sourceLoc), symb).getOutput() + "\n");
+                                    //System.out.print("FROM_4 " + mealy.getState(this.lookupStates.get(sourceLoc).getId()) + " TO " + mealy.getTransition(this.lookupStates.get(sourceLoc), symb).getSuccessor() + " " + symb.toString() + " WITH OUTPUT " + mealy.getTransition(this.lookupStates.get(sourceLoc), symb).getOutput() + "\n");
                                 }
                             }
                         }
-                        if (count > 1) {
-                            throw new IllegalStateException("TOO MANY OUTPUT TRANSITIONS IN LOC " + destLoc.toString());
+                        if (count != 1) {
+                            throw new IllegalStateException("INCORRECT NUMBER OF OUTPUT TRANSITIONS IN LOC " + destLoc.toString());
                         }
                     } else {
                         ParameterizedSymbol output;
@@ -264,11 +264,11 @@ public class MyRAtoMealyTransformer {
                             FastMealyState<ParameterizedSymbol> mState = mealy.addState();
                             this.lookupStates.put(destLoc, mState);
                             mealy.addTransition(this.lookupStates.get(sourceLoc), symb, this.lookupStates.get(destLoc), output);
-                            System.out.print("FROM_C " + mealy.getState(this.lookupStates.get(sourceLoc).getId()) + " TO " + mealy.getTransition(this.lookupStates.get(sourceLoc), symb).getSuccessor() + " " + symb.toString() + " WITH OUTPUT " + mealy.getTransition(this.lookupStates.get(sourceLoc), symb).getOutput() + "\n");
+                            //System.out.print("FROM_C " + mealy.getState(this.lookupStates.get(sourceLoc).getId()) + " TO " + mealy.getTransition(this.lookupStates.get(sourceLoc), symb).getSuccessor() + " " + symb.toString() + " WITH OUTPUT " + mealy.getTransition(this.lookupStates.get(sourceLoc), symb).getOutput() + "\n");
                             visit(destLoc, mealy);
                         } else {
                             mealy.addTransition(this.lookupStates.get(sourceLoc), symb, this.lookupStates.get(destLoc), output);
-                            System.out.print("FROM_D " + mealy.getState(this.lookupStates.get(sourceLoc).getId()) + " TO " + mealy.getTransition(this.lookupStates.get(sourceLoc), symb).getSuccessor() + " " + symb.toString() + " WITH OUTPUT " + mealy.getTransition(this.lookupStates.get(sourceLoc), symb).getOutput() + "\n");
+                            //System.out.print("FROM_D " + mealy.getState(this.lookupStates.get(sourceLoc).getId()) + " TO " + mealy.getTransition(this.lookupStates.get(sourceLoc), symb).getSuccessor() + " " + symb.toString() + " WITH OUTPUT " + mealy.getTransition(this.lookupStates.get(sourceLoc), symb).getOutput() + "\n");
                         }
                     }
                 }

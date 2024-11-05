@@ -65,7 +65,7 @@ public class MySUL implements SUL<ParameterizedSymbol, ParameterizedSymbol> {
         PSymbolInstance psi = new PSymbolInstance(ps, vals);
         inputPref = inputPref.append(psi);
         //System.out.println("Outputprefix: " + outputPref.toString());
-        System.out.println("Inputprefix: " + inputPref.toString());
+        //System.out.println("Inputprefix: " + inputPref.toString());
         return psi;
     }
 

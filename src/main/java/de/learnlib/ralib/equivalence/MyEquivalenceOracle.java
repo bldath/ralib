@@ -105,13 +105,13 @@ public class MyEquivalenceOracle implements IOEquivalenceOracle {
                 MembershipOracle mSul = new SULOracle(mySUL);
                 RandomWpMethodEQOracle rwpO = new RandomWpMethodEQOracle<>(mSul, 0, 2, 10000); //FIX INTS
                 System.out.println("Made RWPEQOracle");
-                System.out.println("Inputalphabet is: " + inputAlph.toString());
+                //System.out.println("Inputalphabet is: " + inputAlph.toString());
                 DefaultQuery<ParameterizedSymbol, Object> qM = rwpO.findCounterExample(mealyMachine, inputAlph);
                 if (qM == null) {
                     System.out.println("No more mealy counterexample");
                     return null;
                 }
-                System.out.println("Generated LearnLib mealy counterexample: " + qM.toString());
+                //System.out.println("Generated LearnLib mealy counterexample: " + qM.toString());
                 DefaultQuery<PSymbolInstance, Boolean> qRA = formatCounterExample();
                 System.out.println("Formated counterexample: " + qRA.toString());
                 return qRA;
