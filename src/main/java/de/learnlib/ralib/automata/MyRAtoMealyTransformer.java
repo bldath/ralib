@@ -116,7 +116,7 @@ public class MyRAtoMealyTransformer {
                             }
                         }
                     }
-                    if (count > 1) {
+                    if (count != 1) {
                         throw new IllegalStateException("INCORRECT NUMBER OF OUTPUT TRANSITIONS IN LOC " + destLoc.toString());
                     }
                 } else {
