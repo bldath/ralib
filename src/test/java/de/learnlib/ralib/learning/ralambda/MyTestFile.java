@@ -512,7 +512,8 @@ public class MyTestFile extends RaLibTestSuite {
         SimulatorSUL dwSUL = new SimulatorSUL(model, teachers, consts);
         MySUL msu = new MySUL(teachers, dwSUL);
         MyEquivalenceOracle mO = new MyEquivalenceOracle(alphabet, msu);
-        //WORKS WHEN BOUNDED BUT SOMETIMES RETURNS NON-COUNTEREXAMPLE AND SOMETIMES CRASHES
+        //WORKS WHEN BOUNDED BUT SOMETIMES CRASHES DUE TO BUG IN RALIB RALAMBDA HYPOTHESIS CREATION
+        //RUN MyNewTestFile instead with RaStar, until bug is fixed in RaLambda library
         DefaultQuery<PSymbolInstance, Boolean> res = mO.findCounterExample(hyp, null);
 
         if (res!=null) {
