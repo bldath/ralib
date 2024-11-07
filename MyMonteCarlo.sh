@@ -18,9 +18,7 @@ do
     n=$(($n+1))
 done
 n=$(($n-1))
-awk '{print $5}' testing.txt | grep -o -E '[0-9]+' >> tmp1.txt
-cat tmp1.txt | grep -o -E '[0-9]+' >> resets.txt
-awk '{print $7}' testing.txt >> tmp2.txt
-cat tmp2.txt | grep -o -E '[0-9]+' >> inputs.txt
-rm output.txt tmp1.txt tmp2.txt
+awk '{print $5}' testing.txt | grep -o -E '[0-9]+' >> resets.txt
+awk '{print $7}' testing.txt | grep -o -E '[0-9]+' >> inputs.txt
+rm output.txt
 awk '{ sum += $1 } END { print sum }' inputs.txt
