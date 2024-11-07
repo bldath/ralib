@@ -48,7 +48,7 @@ import net.automatalib.alphabet.ListAlphabet;
 import net.automatalib.word.Word;
 
 //To run with IOSimulator instead:
-//From linux terminal run: 
+//From linux terminal run:
 //mvn package assembly:single
 //java -ea -jar target/ralib-0.1-SNAPSHOT-jar-with-dependencies.jar iosimulator -f config
 
