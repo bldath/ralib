@@ -4,7 +4,7 @@
 # chmod 755 MyMonteCarlo.sh
 
 # To clean all, run:
-# rm ce_count.txt ce_max.txt ce_avg.txt testing.txt output.txt tmp1.txt tmp2.txt resets.txt inputs.txt
+# rm ce_count.txt ce_max.txt ce_avg.txt testing.txt output.txt resets.txt inputs.txt
 
 n=1
 
@@ -21,4 +21,9 @@ n=$(($n-1))
 awk '{print $5}' testing.txt | grep -o -E '[0-9]+' >> resets.txt
 awk '{print $7}' testing.txt | grep -o -E '[0-9]+' >> inputs.txt
 rm output.txt
-awk '{ sum += $1 } END { print sum }' inputs.txt
+sum=`awk '{ sum += $1 } END { print sum }' inputs.txt`
+echo $((sum)) >> sums.txt
+#while read num; do
+    #echo $(( num / n )) >> results.txt
+#done < sums.txt
+echo $((sum/n)) >> results.txt
