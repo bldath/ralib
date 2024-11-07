@@ -23,7 +23,7 @@ public class MySwitchEqOracles implements IOEquivalenceOracle{
     public DefaultQuery<PSymbolInstance, Boolean> findCounterExample(RegisterAutomaton ra, Collection<? extends PSymbolInstance> clctn) {
         if (!useRAEqOracle) {
             counterexample = raMealyOracle.findCounterExample(ra, clctn);
-            if (counterexample == null) {
+            if (counterexample==null) {
                 useRAEqOracle = true;
                 counterexample = raOracle.findCounterExample(ra, clctn);
             }

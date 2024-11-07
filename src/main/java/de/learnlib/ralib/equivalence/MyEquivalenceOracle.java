@@ -30,6 +30,7 @@ public class MyEquivalenceOracle implements IOEquivalenceOracle {
     private Collection<ParameterizedSymbol> inputAlph;
     private Word<PSymbolInstance> inputPrefix = null;
     private Word<PSymbolInstance> outputPrefix = null;
+    private Integer ceCount = 0;
 
     public MyEquivalenceOracle(Alphabet<ParameterizedSymbol> alphabet, MySUL mySUL) {
         this.inputAlph = new ArrayList<>();
@@ -108,9 +109,14 @@ public class MyEquivalenceOracle implements IOEquivalenceOracle {
                 //System.out.println("Inputalphabet is: " + inputAlph.toString());
                 DefaultQuery<ParameterizedSymbol, Object> qM = rwpO.findCounterExample(mealyMachine, inputAlph);
                 if (qM == null) {
-                    System.out.println("No more mealy counterexample");
+                    if (ceCount != 0) {
+                        System.out.println("RWP_CE " + ceCount);
+                        System.out.println("No more mealy counterexample");
+                        ceCount = 0;
+                    }
                     return null;
                 }
+                ceCount++;
                 //System.out.println("Generated LearnLib mealy counterexample: " + qM.toString());
                 DefaultQuery<PSymbolInstance, Boolean> qRA = formatCounterExample();
                 System.out.println("Formated counterexample: " + qRA.toString());
