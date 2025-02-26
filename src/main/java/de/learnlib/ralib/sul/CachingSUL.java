@@ -59,5 +59,15 @@ public class CachingSUL extends DataWordSUL{
         }
         return out;
     }
+    
+    @Override
+    public long getResets() {
+    	return sul.getResets();
+    }
+    
+    @Override
+    public long getInputs() {
+    	return sul.getInputs();
+    }
 
 }

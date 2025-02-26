@@ -32,7 +32,15 @@ public class MyEquivalenceOracle implements IOEquivalenceOracle {
     private Word<PSymbolInstance> outputPrefix = null;
     private Integer ceCount = 0;
 
-    public MyEquivalenceOracle(Alphabet<ParameterizedSymbol> alphabet, MySUL mySUL) {
+    private final int minimalSize;
+    private final int rndLength;
+    private final int bound;
+
+    public MyEquivalenceOracle(Alphabet<ParameterizedSymbol> alphabet,
+    		MySUL mySUL,
+    		int minimalSize,
+    		int rndLength,
+    		int bound) {
         this.inputAlph = new ArrayList<>();
         this.alphabet = alphabet;
         makeInputAlphabet(alphabet);
@@ -40,6 +48,13 @@ public class MyEquivalenceOracle implements IOEquivalenceOracle {
         this.mySUL = mySUL;
         this.inputPrefix = Word.epsilon();
         this.outputPrefix = Word.epsilon();
+        this.minimalSize = minimalSize;
+        this.rndLength = rndLength;
+        this.bound = bound;
+    }
+
+    public MyEquivalenceOracle(Alphabet<ParameterizedSymbol> alphabet, MySUL mySUL) {
+    	this(alphabet, mySUL, 1, 10, 1000);
     }
 
     public void setHypothesis(MutableRegisterAutomaton ra) {
@@ -104,7 +119,7 @@ public class MyEquivalenceOracle implements IOEquivalenceOracle {
                 this.mealyMachine = raToM.getMealy();
                 System.out.println("Made mealy");
                 MembershipOracle mSul = new SULOracle(mySUL);
-                RandomWpMethodEQOracle rwpO = new RandomWpMethodEQOracle<>(mSul, 0, 2, 10000); //FIX INTS
+                RandomWpMethodEQOracle rwpO = new RandomWpMethodEQOracle<>(mSul, minimalSize, rndLength, bound); //FIX INTS
                 System.out.println("Made RWPEQOracle");
                 //System.out.println("Inputalphabet is: " + inputAlph.toString());
                 DefaultQuery<ParameterizedSymbol, Object> qM = rwpO.findCounterExample(mealyMachine, inputAlph);
@@ -122,4 +137,12 @@ public class MyEquivalenceOracle implements IOEquivalenceOracle {
                 System.out.println("Formated counterexample: " + qRA.toString());
                 return qRA;
             }
+    
+    public long getResets() {
+    	return mySUL.getResets();
+    }
+    
+    public long getInputs() {
+    	return mySUL.getInputs();
+    }
 }

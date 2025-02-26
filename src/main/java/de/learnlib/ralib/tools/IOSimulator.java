@@ -234,7 +234,7 @@ public class IOSimulator extends AbstractToolWithRandomWalk {
             default:
                 throw new ConfigurationException("Unknown Learning algorithm: " + this.learner);
         }
-        QueryStatistics queryStats = new QueryStatistics(measurements, sulLearn, trackingSulTest);
+        QueryStatistics queryStats = new QueryStatistics(measurements, sulLearn, sulTest);
         this.rastar.setStatisticCounter(queryStats);
 
         this.eqTest = new IOEquivalenceTest(model, teachers, consts, true, actions);
@@ -266,10 +266,19 @@ public class IOSimulator extends AbstractToolWithRandomWalk {
                     inputSymbols);
 
             if (useFsmAbstraction) {
+            	int minimalSize = OPTION_WP_MIN_SIZE.parse(config);
+            	int rndLength = OPTION_WP_RND_LENGTH.parse(config);
+            	int bound = OPTION_WP_BOUND.parse(config);
+            	rndLength = rndLength >= 0 ? rndLength : maxDepth - minimalSize;
+            	bound = bound > 0 ?bound :
+            		(maxTestRuns > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int)maxTestRuns);
             	MySUL abstractionSUL = new MySUL(teachers, sulTest);
             	abstractionOracle = new MyEquivalenceOracle(
             			new ArrayAlphabet<>(inputSymbols),
-            			abstractionSUL);
+            			abstractionSUL,
+            			minimalSize,
+            			rndLength,
+            			bound);
             	randomWalk = new MySwitchEqOracles(ioRandomWalk, abstractionOracle);
             } else {
             	randomWalk = ioRandomWalk;
@@ -435,6 +444,17 @@ public class IOSimulator extends AbstractToolWithRandomWalk {
 
         // statistics
         System.out.println(queryStats.toString());
+        if (randomWalk instanceof MySwitchEqOracles) {
+        	MySwitchEqOracles switchOracle = (MySwitchEqOracles) randomWalk;
+        	switchOracle.printResults();
+        } else if (randomWalk instanceof IORandomWalk) {
+        	IORandomWalk iorw = (IORandomWalk) randomWalk;
+        	Measurements mes = rastar.getQueryStatistics().getMeasurements(QueryStatistics.TESTING);
+        	System.out.println("Random Walk Resets: " + mes.resets);
+        	System.out.println("Random Walk Inputs: " + mes.inputs);
+        	System.out.println("Random Walk Resets (incl. final): " + iorw.getResets());
+        	System.out.println("Random Walk Inputs (incl. final): " + iorw.getInputs());
+        }
 
     }
 

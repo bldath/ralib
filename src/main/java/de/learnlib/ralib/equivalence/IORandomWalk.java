@@ -254,5 +254,13 @@ public class IORandomWalk implements IOEquivalenceOracle {
         }
         return ps;
     }
+    
+    public long getResets() {
+    	return target.getResets();
+    }
+    
+    public long getInputs() {
+    	return target.getInputs();
+    }
 
 }

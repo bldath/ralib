@@ -92,4 +92,12 @@ public class MySUL implements SUL<ParameterizedSymbol, ParameterizedSymbol> {
     public Map<DataType, Theory> getTeachers() {
         return this.teach;
     }
+    
+    public long getResets() {
+    	return dwSUL.getResets();
+    }
+    
+    public long getInputs() {
+    	return dwSUL.getInputs();
+    }
 }
